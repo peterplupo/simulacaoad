@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Publisher;
+import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
 
 public class Sistema_Cenario1 extends Sistema{
 	private double lambda;      //taxa de entrada de peer no sistema
@@ -21,6 +22,7 @@ public class Sistema_Cenario1 extends Sistema{
 			
 		peers = new ArrayList<Peer>();
 		publisher = new Publisher(this.numeroBlocos);
+		listaEventos = new ArrayList<Evento>();
 		sistemaAberto = true;
 		
 	}

@@ -19,7 +19,7 @@ import br.ufrj.im.dcc.avaliacaodesempenho.utils.Funcoes;
 public class Sistema {
 	private Funcoes funcoes;
 	//private TiposEvento tiposEvento;
-	private ArrayList<Evento> listaEventos;
+	protected ArrayList<Evento> listaEventos;
 	protected Publisher publisher;
 	protected ArrayList<Peer> peers;
 	protected boolean sistemaAberto;
@@ -31,7 +31,7 @@ public class Sistema {
 	public Sistema() {
 		funcoes = new Funcoes();
 		//tiposEvento = new TiposEvento();
-		listaEventos = new ArrayList<Evento>();
+		//listaEventos = new ArrayList<Evento>();
 	}
 
 	
