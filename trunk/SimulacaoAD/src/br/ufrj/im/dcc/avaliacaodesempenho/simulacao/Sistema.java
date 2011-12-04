@@ -1,7 +1,7 @@
 package br.ufrj.im.dcc.avaliacaodesempenho.simulacao;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.PriorityQueue;
 
 import br.ufrj.im.dcc.avaliacaodesempenho.distribuicoes.Uniforme;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Bloco;
@@ -18,7 +18,7 @@ import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
  * */
 public class Sistema {
 	private Uniforme uniforme;
-	protected List<Evento> listaEventos;
+	protected PriorityQueue<Evento> listaEventos;
 	protected Publisher publisher;
 	protected ArrayList<Peer> peers;
 	protected boolean sistemaAberto;
@@ -51,16 +51,7 @@ public class Sistema {
 			listaEventos.add(evento);
 			
 		} else {
-			ArrayList<Bloco> assinatura = new ArrayList<Bloco>();
-			Peer peer = null;
-			
-			//publisher escolhe peer cuja assinatura identifique que o peer não tem blocos que o publisher tem
-			while (assinatura.size() == 0) {
-				peer = peers.get(uniforme.geraUniforme(qtdPeersSistema));
-				
-				assinatura = new ArrayList<Bloco>(publisher.getBlocosSistema());
-				assinatura.removeAll(peer.assinaturaPeer());
-			}
+			Peer peer = peers.get(uniforme.geraUniforme(qtdPeersSistema));
 			
 			//publisher escolhe um bloco dentre os blocos que o peer não tem
 			ArrayList<Bloco> blocosNaoComuns = buscaBlocosNaoComuns(publisher.getBlocosSistema(), peer.getBlocosPeer());
@@ -125,16 +116,7 @@ public class Sistema {
 	protected void trataEventoUploadPeer(double tempoUploadPeer, Peer peer, double tempoSaidaPeer) {
 		Evento evento = null;
 		
-		ArrayList<Bloco> assinatura = new ArrayList<Bloco>();
-		Peer peerDestino = null;
-		
-		//publisher escolhe peer cuja assinatura identifique que o peer não tem blocos que o publisher tem
-		while (assinatura.size() == 0) {
-			peerDestino = peers.get(uniforme.geraUniforme(peers.size()));
-			
-			assinatura = new ArrayList<Bloco>(peer.getBlocosPeer());
-			assinatura.removeAll(peerDestino.assinaturaPeer());
-		}
+		Peer peerDestino = peers.get(uniforme.geraUniforme(peers.size()));
 		
 		//publisher escolhe um bloco dentre os blocos que o peer não tem
 		ArrayList<Bloco> blocosNaoComuns = buscaBlocosNaoComuns(peer.getBlocosPeer(), peerDestino.getBlocosPeer());
@@ -146,7 +128,7 @@ public class Sistema {
 			Bloco bloco = blocosNaoComuns.get(blocoEscolhido);
 			
 			//publisher envia bloco para peer
-			peer.addBloco(bloco);
+			peerDestino.addBloco(bloco);
 			
 		}
 		
