@@ -143,7 +143,7 @@ public class Sistema {
 		if(blocosNaoComuns.size() > 0) {
 			int qtdBlocos = blocosNaoComuns.size();
 			int blocoEscolhido = uniforme.geraUniforme(qtdBlocos);
-			Bloco bloco = publisher.getBlocosSistema().get(blocoEscolhido);
+			Bloco bloco = blocosNaoComuns.get(blocoEscolhido);
 			
 			//publisher envia bloco para peer
 			peer.addBloco(bloco);
