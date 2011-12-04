@@ -1,26 +1,19 @@
 package br.ufrj.im.dcc.avaliacaodesempenho.start;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
-import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Bloco;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Publisher;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
-import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
 import br.ufrj.im.dcc.avaliacaodesempenho.simulacao.Sistema_Cenario1;
 import br.ufrj.im.dcc.avaliacaodesempenho.utils.Exponencial;
-import br.ufrj.im.dcc.avaliacaodesempenho.utils.Funcoes;
 
 public class Start {
 	private static ArrayList<Peer> peers = new ArrayList<Peer>();
-	private static Funcoes funcoes;
 	private static Publisher publisher;
 
 	public static void main(String[] args) {
 		peers = new ArrayList<Peer>();
-		funcoes = new Funcoes();
 		publisher = new Publisher(1);
 		
 		
