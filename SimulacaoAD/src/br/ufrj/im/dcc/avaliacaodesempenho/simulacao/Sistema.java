@@ -59,7 +59,7 @@ public class Sistema {
 			//publisher faz escolha bloco
 			ArrayList<Bloco> blocosNaoComuns = funcoes.buscaBlocosNaoComuns(publisher.getBlocosSistema(), peers.get(peerEscolhido).getBlocosPeer());
 			
-			if(blocosNaoComuns.size() != 0) {
+			if(blocosNaoComuns.size() > 0) {
 				int qtdBlocos = blocosNaoComuns.size();
 				int blocoEscolhido = funcoes.geraUniforme(qtdBlocos);
 				Bloco bloco = publisher.getBlocosSistema().get(blocoEscolhido);
@@ -163,9 +163,10 @@ public class Sistema {
 		
 		
 		// decide a saida do peer escolhido
+		int qtdBlocosPublisher = publisher.getQtdBlocos();
 		int qtdBlocosPeerEscolhido = peers.get(peerEscolhido).getBlocosPeer().size();
-		if(qtdPeersSistema == qtdBlocosPeerEscolhido) {
-			
+		if(qtdBlocosPublisher == qtdBlocosPeerEscolhido) {
+			System.out.println("passou em teste se qtd blocos no sistema e no peer ta ok.");
 			//boolean sistemaFechado = false;
 			if(saidaPeer instanceof Double) { //se ele sair imediatamente o tempo para saida eh 0.0
 				Double saida = (Double) saidaPeer;
