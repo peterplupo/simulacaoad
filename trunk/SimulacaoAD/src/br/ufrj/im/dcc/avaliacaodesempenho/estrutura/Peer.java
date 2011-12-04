@@ -29,10 +29,8 @@ public class Peer {
 	}
 	
 	/* Devolve a assinatura do peer. Refere-se a quantidade de blocos que um peer possui. */
-	public Integer assinaturaPeer(){
-		int qtd = 0;
-		qtd = this.blocosPeer.size();
-		return qtd; 
+	public ArrayList<Bloco> assinaturaPeer(){
+		return blocosPeer;
 	}
 	
 	/* GETTER e SETTER. */
