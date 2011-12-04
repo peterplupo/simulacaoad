@@ -23,10 +23,10 @@ public class Evento implements Comparable<Evento> {
 	
 	@Override
 	public int compareTo(Evento evento) {
-		if(this.tempoOcorrenciaEvento > ((Evento)evento).tempoOcorrenciaEvento) {
+		if (tempoOcorrenciaEvento.compareTo(evento.tempoOcorrenciaEvento) == 0) {
 			return 1;
-		} else { 
-			return -1;
+		} else {
+			return tempoOcorrenciaEvento.compareTo(evento.tempoOcorrenciaEvento);
 		}
 	}
 
