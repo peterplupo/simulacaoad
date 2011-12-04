@@ -2,12 +2,12 @@ package br.ufrj.im.dcc.avaliacaodesempenho.simulacao;
 
 import java.util.ArrayList;
 
+import br.ufrj.im.dcc.avaliacaodesempenho.distribuicoes.Uniforme;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Bloco;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Publisher;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
-import br.ufrj.im.dcc.avaliacaodesempenho.utils.Uniforme;
 
 
 /**
