@@ -18,7 +18,6 @@ import br.ufrj.im.dcc.avaliacaodesempenho.utils.Funcoes;
  * */
 public class Sistema {
 	private Funcoes funcoes;
-	//private TiposEvento tiposEvento;
 	protected ArrayList<Evento> listaEventos;
 	protected Publisher publisher;
 	protected ArrayList<Peer> peers;
@@ -30,8 +29,6 @@ public class Sistema {
 	
 	public Sistema() {
 		funcoes = new Funcoes();
-		//tiposEvento = new TiposEvento();
-		//listaEventos = new ArrayList<Evento>();
 	}
 
 	
@@ -104,7 +101,8 @@ public class Sistema {
 			tempo = tempo + instanteChegadaSistema;
 			
 			//adicionando evento Chegada Peer na lista de eventos.
-			evento = new Evento(peer, TiposEvento.CHEGADA_PEER, tempo);
+			//evento = new Evento(peer, TiposEvento.CHEGADA_PEER, tempo);
+			evento = new Evento(null, TiposEvento.CHEGADA_PEER, tempo);
 			listaEventos.add(evento);
 			
 			
