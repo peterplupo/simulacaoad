@@ -2,11 +2,11 @@ package br.ufrj.im.dcc.avaliacaodesempenho.start;
 
 import java.util.ArrayList;
 
+import br.ufrj.im.dcc.avaliacaodesempenho.distribuicoes.Exponencial;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Publisher;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
 import br.ufrj.im.dcc.avaliacaodesempenho.simulacao.Sistema_Cenario1;
-import br.ufrj.im.dcc.avaliacaodesempenho.utils.Exponencial;
 
 public class Start {
 	private static ArrayList<Peer> peers = new ArrayList<Peer>();

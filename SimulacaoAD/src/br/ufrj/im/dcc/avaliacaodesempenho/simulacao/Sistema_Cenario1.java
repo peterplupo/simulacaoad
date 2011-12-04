@@ -2,11 +2,11 @@ package br.ufrj.im.dcc.avaliacaodesempenho.simulacao;
 
 import java.util.ArrayList;
 
+import br.ufrj.im.dcc.avaliacaodesempenho.distribuicoes.Exponencial;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Publisher;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
-import br.ufrj.im.dcc.avaliacaodesempenho.utils.Exponencial;
 
 public class Sistema_Cenario1 extends Sistema{
 	private final int TAM_SIMULACAO = 5;
