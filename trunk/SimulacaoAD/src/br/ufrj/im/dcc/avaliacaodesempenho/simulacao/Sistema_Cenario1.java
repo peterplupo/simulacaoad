@@ -66,13 +66,13 @@ public class Sistema_Cenario1 extends Sistema{
 		listaEventos.add(evento);
 		
 		for(int i = 0; i < TAM_SIMULACAO; i++) {
-			String tipoEvento = listaEventos.get(i).getTipoEvento();
-			if(tipoEvento.equalsIgnoreCase(TiposEvento.UPLOAD_PUBLISHER)) {
+			TiposEvento tipoEvento = listaEventos.get(i).getTipoEvento();
+			if(tipoEvento == TiposEvento.UPLOAD_PUBLISHER) {
 				tempo = tempo + uploadPublisher.gerar();
 				trataEventoUploadPublisher(tempo);
 				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
 			}
-			if(tipoEvento.equalsIgnoreCase(TiposEvento.CHEGADA_PEER)) {
+			if(tipoEvento == TiposEvento.CHEGADA_PEER) {
 				double tempoEntrada = listaEventos.get(i).getTempoOcorrenciaEvento();
 				double tempoChegada = tempo + chegadaPeer.gerar();
 				tempo = tempoChegada;
@@ -81,7 +81,7 @@ public class Sistema_Cenario1 extends Sistema{
 				trataEventoChegadaPeer(tempoEntrada, tempoChegada, tempoUpload);  
 				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
 			}
-			if(tipoEvento.equalsIgnoreCase(TiposEvento.UPLOAD_PEER)) {
+			if(tipoEvento == TiposEvento.UPLOAD_PEER) {
 				Peer peer = listaEventos.get(i).getPeer();
 				double tempoUpload = tempo + uploadPeer.gerar();
 				tempo = tempoUpload;
@@ -90,7 +90,7 @@ public class Sistema_Cenario1 extends Sistema{
 				trataEventoUploadPeer(tempoUpload, peer, tempoSaida);
 				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
 			}
-			if(tipoEvento.equalsIgnoreCase(TiposEvento.SAIDA_PEER)) {
+			if(tipoEvento == TiposEvento.SAIDA_PEER) {
 				Peer peer = listaEventos.get(i).getPeer();
 				tempo = tempo + chegadaPeer.gerar();
 				trataEventoSaidaPeer(tempo, peer);
