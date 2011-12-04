@@ -7,7 +7,6 @@ import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Publisher;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
-import br.ufrj.im.dcc.avaliacaodesempenho.utils.Funcoes;
 import br.ufrj.im.dcc.avaliacaodesempenho.utils.Uniforme;
 
 
@@ -17,7 +16,6 @@ import br.ufrj.im.dcc.avaliacaodesempenho.utils.Uniforme;
  * @version 1.0 
  * */
 public class Sistema {
-	private Funcoes funcoes;
 	private Uniforme uniforme;
 	protected ArrayList<Evento> listaEventos;
 	protected Publisher publisher;
@@ -30,7 +28,6 @@ public class Sistema {
 	
 	public Sistema(long seed) {
 		uniforme = new Uniforme(seed);
-		funcoes = new Funcoes();
 	}
 
 	
@@ -57,7 +54,7 @@ public class Sistema {
 			int peerEscolhido = uniforme.geraUniforme(qtdPeersSistema);
 			
 			//publisher faz escolha bloco
-			ArrayList<Bloco> blocosNaoComuns = funcoes.buscaBlocosNaoComuns(publisher.getBlocosSistema(), peers.get(peerEscolhido).getBlocosPeer());
+			ArrayList<Bloco> blocosNaoComuns = buscaBlocosNaoComuns(publisher.getBlocosSistema(), peers.get(peerEscolhido).getBlocosPeer());
 			
 			if(blocosNaoComuns.size() > 0) {
 				int qtdBlocos = blocosNaoComuns.size();
@@ -129,7 +126,7 @@ public class Sistema {
 		}
 		
 		//peer faz escolha bloco
-		ArrayList<Bloco> blocosNaoComuns = funcoes.buscaBlocosNaoComuns(peer.getBlocosPeer(), peers.get(peerEscolhido).getBlocosPeer());
+		ArrayList<Bloco> blocosNaoComuns = buscaBlocosNaoComuns(peer.getBlocosPeer(), peers.get(peerEscolhido).getBlocosPeer());
 		
 		if(blocosNaoComuns.size() != 0) {
 			int qtdBlocos = blocosNaoComuns.size();
@@ -182,6 +179,16 @@ public class Sistema {
 			listaEventos.add(evento);
 		}
 		
+	}
+	
+	/* 
+	 * Funcao que devolve o conjunto de blocos pertencentes ao peer de origem 
+	 * e nao pertencentes ao peer destino.
+	 * */
+	private ArrayList<Bloco> buscaBlocosNaoComuns(ArrayList<Bloco> peerOrigem, ArrayList<Bloco> peerDestino) {
+		ArrayList<Bloco> blocosNaoComuns = new ArrayList<Bloco>(peerOrigem);
+		blocosNaoComuns.removeAll(peerDestino);
+		return blocosNaoComuns;
 	}
 
 }
