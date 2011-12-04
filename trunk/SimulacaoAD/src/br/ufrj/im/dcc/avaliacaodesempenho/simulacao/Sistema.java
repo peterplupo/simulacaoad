@@ -50,11 +50,19 @@ public class Sistema {
 			listaEventos.add(evento);
 			
 		} else {
-			//publisher faz escolha peer
-			int peerEscolhido = uniforme.geraUniforme(qtdPeersSistema);
+			ArrayList<Bloco> assinatura = new ArrayList<Bloco>();
+			Peer peer = null;
 			
-			//publisher faz escolha bloco
-			ArrayList<Bloco> blocosNaoComuns = buscaBlocosNaoComuns(publisher.getBlocosSistema(), peers.get(peerEscolhido).getBlocosPeer());
+			//publisher escolhe peer cuja assinatura identifique que o peer não tem blocos que o publisher tem
+			while (assinatura.size() == 0) {
+				peer = peers.get(uniforme.geraUniforme(qtdPeersSistema));
+				
+				assinatura = new ArrayList<Bloco>(publisher.getBlocosSistema());
+				assinatura.removeAll(peer.assinaturaPeer());
+			}
+			
+			//publisher escolhe um bloco dentre os blocos que o peer não tem
+			ArrayList<Bloco> blocosNaoComuns = buscaBlocosNaoComuns(publisher.getBlocosSistema(), peer.getBlocosPeer());
 			
 			if(blocosNaoComuns.size() > 0) {
 				int qtdBlocos = blocosNaoComuns.size();
@@ -62,7 +70,7 @@ public class Sistema {
 				Bloco bloco = publisher.getBlocosSistema().get(blocoEscolhido);
 				
 				//publisher envia bloco para peer
-				peers.get(peerEscolhido).addBloco(bloco);
+				peer.addBloco(bloco);
 				
 			}
 			
