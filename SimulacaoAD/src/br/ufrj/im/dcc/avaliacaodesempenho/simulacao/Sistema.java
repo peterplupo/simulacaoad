@@ -124,45 +124,48 @@ public class Sistema {
 	protected void trataEventoUploadPeer(double tempoUploadPeer, Peer peer, double tempoSaidaPeer) {
 		Evento evento = null;
 		
-		//peer faz escolha de peer diferente de si proprio
-		int indicePeerAtual = peers.indexOf(peer);
-		int qtdPeersSistema = peers.size();
-		int peerEscolhido = uniforme.geraUniforme(qtdPeersSistema);
+		ArrayList<Bloco> assinatura = new ArrayList<Bloco>();
+		Peer peerDestino = null;
 		
-		while(indicePeerAtual == peerEscolhido) {
-			peerEscolhido = uniforme.geraUniforme(qtdPeersSistema);
+		//publisher escolhe peer cuja assinatura identifique que o peer não tem blocos que o publisher tem
+		while (assinatura.size() == 0) {
+			peerDestino = peers.get(uniforme.geraUniforme(peers.size()));
+			
+			assinatura = new ArrayList<Bloco>(peer.getBlocosPeer());
+			assinatura.removeAll(peerDestino.assinaturaPeer());
 		}
 		
-		//peer faz escolha bloco
-		ArrayList<Bloco> blocosNaoComuns = buscaBlocosNaoComuns(peer.getBlocosPeer(), peers.get(peerEscolhido).getBlocosPeer());
+		//publisher escolhe um bloco dentre os blocos que o peer não tem
+		ArrayList<Bloco> blocosNaoComuns = buscaBlocosNaoComuns(peer.getBlocosPeer(), peerDestino.getBlocosPeer());
 		
-		if(blocosNaoComuns.size() != 0) {
+		//peer faz escolha bloco
+		if(blocosNaoComuns.size() > 0) {
 			int qtdBlocos = blocosNaoComuns.size();
 			int blocoEscolhido = uniforme.geraUniforme(qtdBlocos);
-			Bloco bloco = peer.getBlocosPeer().get(blocoEscolhido);
+			Bloco bloco = publisher.getBlocosSistema().get(blocoEscolhido);
 			
-			//peer envia bloco para peer escolhido
-			peers.get(peerEscolhido).addBloco(bloco);
+			//publisher envia bloco para peer
+			peer.addBloco(bloco);
 			
 		}
 		
 		//seta tempo de proximo upload do peer escolhido
-		peers.get(peerEscolhido).setInstanteUploadPeer(tempoUploadPeer);
+		peerDestino.setInstanteUploadPeer(tempoUploadPeer);
 		
 		//adicionando evento Upload Peer na lista de eventos.
-		evento = new Evento(peers.get(peerEscolhido), TiposEvento.UPLOAD_PEER, tempoUploadPeer);
+		evento = new Evento(peerDestino, TiposEvento.UPLOAD_PEER, tempoUploadPeer);
 		listaEventos.add(evento);
 		
 		
 		// decide a saida do peer escolhido
 		int qtdBlocosPublisher = publisher.getQtdBlocos();
-		int qtdBlocosPeerEscolhido = peers.get(peerEscolhido).getBlocosPeer().size();
+		int qtdBlocosPeerEscolhido = peerDestino.getBlocosPeer().size();
 		if(qtdBlocosPublisher == qtdBlocosPeerEscolhido) {
 			System.out.println("passou em teste se qtd blocos no sistema e no peer ta ok.");
-			peers.get(peerEscolhido).setInstanteSaidaSistema(tempoSaidaPeer);
+			peerDestino.setInstanteSaidaSistema(tempoSaidaPeer);
 
 			//adicionando evento Saida Peer na lista de eventos.
-			evento = new Evento(peers.get(peerEscolhido), TiposEvento.SAIDA_PEER, tempoSaidaPeer);
+			evento = new Evento(peerDestino, TiposEvento.SAIDA_PEER, tempoSaidaPeer);
 			listaEventos.add(evento);
 		}
 		
