@@ -25,7 +25,7 @@ public class Peer {
 	
 	/* Adiciona um novo bloco ao conjunto de blocos do peer. */
 	public void addBloco(Bloco bloco){
-		this.blocosPeer.add(bloco);
+		this.blocosPeer.add(bloco.getChaveBloco(), bloco);
 	}
 	
 	/* Devolve a assinatura do peer. Refere-se a quantidade de blocos que um peer possui. */
