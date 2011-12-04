@@ -24,8 +24,8 @@ public class Funcoes {
 	 * e nao pertencentes ao peer destino.
 	 * */
 	public ArrayList<Bloco> buscaBlocosNaoComuns(ArrayList<Bloco> peerOrigem, ArrayList<Bloco> peerDestino) {
-		ArrayList<Bloco> blocosNaoComuns = new ArrayList<Bloco>(peerDestino);
-		blocosNaoComuns.removeAll(peerOrigem);
+		ArrayList<Bloco> blocosNaoComuns = new ArrayList<Bloco>(peerOrigem);
+		blocosNaoComuns.removeAll(peerDestino);
 		return blocosNaoComuns;
 	}
 	
