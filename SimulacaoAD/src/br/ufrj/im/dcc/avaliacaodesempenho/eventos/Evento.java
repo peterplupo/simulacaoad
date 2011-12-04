@@ -9,12 +9,12 @@ import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
  * */
 public class Evento implements Comparable<Evento> {
 	//private Integer tipoEvento;
-	private String tipoEvento;
+	private TiposEvento tipoEvento;
 	private Double tempoOcorrenciaEvento;
 	Peer peer = null;
 	
 	/* Aqui nem sempre o peer serah instanciado. Vai depender do tipo de evento. */
-	public Evento(Peer peer, String tipoEvento, Double tempoOcorrenciaEvento){
+	public Evento(Peer peer, TiposEvento tipoEvento, Double tempoOcorrenciaEvento){
 		this.peer = peer;
 		this.tipoEvento = tipoEvento;
 		this.tempoOcorrenciaEvento = tempoOcorrenciaEvento;
@@ -39,7 +39,7 @@ public class Evento implements Comparable<Evento> {
 		return peer;
 	}
 
-	public String getTipoEvento() {
+	public TiposEvento getTipoEvento() {
 		return tipoEvento;
 	}
 

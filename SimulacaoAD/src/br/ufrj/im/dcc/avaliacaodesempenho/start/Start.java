@@ -53,7 +53,6 @@ public class Start {
 		//double tempo = semente;
 		
 		
-		TiposEvento tipoEvento = new TiposEvento();
 		
 
 		Sistema_Cenario1 sc1 = new Sistema_Cenario1();
