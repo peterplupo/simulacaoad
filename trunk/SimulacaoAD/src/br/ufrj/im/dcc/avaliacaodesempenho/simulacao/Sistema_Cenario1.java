@@ -10,7 +10,7 @@ import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
 
 public class Sistema_Cenario1 extends Sistema{
-	private final int TAM_SIMULACAO = 5;
+	private final int TAM_SIMULACAO = 5000;
 	
 	private double[] lambdas = {0.1, 0.5, 0.9};
 	private double lambda;      //taxa de chegada de peer no sistema
@@ -66,7 +66,7 @@ public class Sistema_Cenario1 extends Sistema{
 		evento = new Evento(null, TiposEvento.CHEGADA_PEER, tempo);
 		listaEventos.add(evento);
 		
-		for(int i = 0; i <= TAM_SIMULACAO; i++) {
+		for(int i = 0; i < TAM_SIMULACAO; i++) {
 			Evento eventoLista = listaEventos.get(i);
 			switch (eventoLista.getTipoEvento()) {
 			case UPLOAD_PUBLISHER:
