@@ -1,6 +1,7 @@
 package br.ufrj.im.dcc.avaliacaodesempenho.simulacao;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import br.ufrj.im.dcc.avaliacaodesempenho.distribuicoes.Exponencial;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
@@ -41,7 +42,7 @@ public class Sistema_Cenario1 extends Sistema{
 		
 		peers = new ArrayList<Peer>();
 		publisher = new Publisher(this.numeroBlocos);
-		listaEventos = new ArrayList<Evento>();
+		listaEventos = new TreeSet<Evento>();
 		sistemaAberto = true;
 		
 		
@@ -65,15 +66,15 @@ public class Sistema_Cenario1 extends Sistema{
 		evento = new Evento(null, TiposEvento.CHEGADA_PEER, tempo);
 		listaEventos.add(evento);
 		
-		for(int i = 0; i < TAM_SIMULACAO; i++) {
-			TiposEvento tipoEvento = listaEventos.get(i).getTipoEvento();
+		for(Evento eventoLista : listaEventos) {
+			TiposEvento tipoEvento = eventoLista.getTipoEvento();
 			if(tipoEvento == TiposEvento.UPLOAD_PUBLISHER) {
 				tempo = tempo + uploadPublisher.gerar();
 				trataEventoUploadPublisher(tempo);
 				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
 			}
 			if(tipoEvento == TiposEvento.CHEGADA_PEER) {
-				double tempoEntrada = listaEventos.get(i).getTempoOcorrenciaEvento();
+				double tempoEntrada = eventoLista.getTempoOcorrenciaEvento();
 				double tempoChegada = tempo + chegadaPeer.gerar();
 				tempo = tempoChegada;
 				double tempoUpload = tempo + uploadPeer.gerar();
@@ -82,7 +83,7 @@ public class Sistema_Cenario1 extends Sistema{
 				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
 			}
 			if(tipoEvento == TiposEvento.UPLOAD_PEER) {
-				Peer peer = listaEventos.get(i).getPeer();
+				Peer peer = eventoLista.getPeer();
 				double tempoUpload = tempo + uploadPeer.gerar();
 				tempo = tempoUpload;
 				double tempoSaida = tempo + saidaPeer;
@@ -91,7 +92,7 @@ public class Sistema_Cenario1 extends Sistema{
 				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
 			}
 			if(tipoEvento == TiposEvento.SAIDA_PEER) {
-				Peer peer = listaEventos.get(i).getPeer();
+				Peer peer = eventoLista.getPeer();
 				tempo = tempo + chegadaPeer.gerar();
 				trataEventoSaidaPeer(tempo, peer);
 				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
@@ -99,8 +100,6 @@ public class Sistema_Cenario1 extends Sistema{
 			
 		}
 		System.out.println("peers.size(): " + peers.size());
-		
-		
 		
 	}
 }
