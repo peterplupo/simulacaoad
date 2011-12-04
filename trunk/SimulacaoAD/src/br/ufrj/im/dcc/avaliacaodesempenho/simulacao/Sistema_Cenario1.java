@@ -25,8 +25,8 @@ public class Sistema_Cenario1 extends Sistema{
 	private Double tempo;
 	
 
-	public Sistema_Cenario1 () {
-		super();
+	public Sistema_Cenario1 (long seed) {
+		super(seed);
 		this.lambda = 0.1;
 		this.mi = 0.1;           // tanto faz já que sai do sistema imediatamente apos virar seed
 		this.gama = 0.0;         // quer dizer que o peer sai imediatamente apos virar seed
@@ -34,9 +34,9 @@ public class Sistema_Cenario1 extends Sistema{
 		this.numeroBlocos = 1;
 		this.tempo = 0.0;
 		
-		this.uploadPublisher = new Exponencial(this.u, System.currentTimeMillis());
-		this.chegadaPeer = new Exponencial(this.lambda, System.currentTimeMillis());
-		this.uploadPeer = new Exponencial(this.mi, System.currentTimeMillis());
+		this.uploadPublisher = new Exponencial(this.u, seed);
+		this.chegadaPeer = new Exponencial(this.lambda, seed);
+		this.uploadPeer = new Exponencial(this.mi, seed);
 		this.saidaPeer = this.gama;    //pois peer sai imediatamente apos virar seed
 		
 		peers = new ArrayList<Peer>();

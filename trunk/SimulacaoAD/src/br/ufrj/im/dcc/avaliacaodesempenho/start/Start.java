@@ -55,7 +55,7 @@ public class Start {
 		
 		
 
-		Sistema_Cenario1 sc1 = new Sistema_Cenario1();
+		Sistema_Cenario1 sc1 = new Sistema_Cenario1(0);
 		sc1.simulacao();
 	}
 
