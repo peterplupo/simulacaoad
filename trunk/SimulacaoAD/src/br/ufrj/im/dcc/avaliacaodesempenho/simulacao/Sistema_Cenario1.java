@@ -42,7 +42,7 @@ public class Sistema_Cenario1 extends Sistema{
 		
 		peers = new ArrayList<Peer>();
 		publisher = new Publisher(this.numeroBlocos);
-		listaEventos = new TreeSet<Evento>();
+		listaEventos = new ArrayList<Evento>();
 		sistemaAberto = true;
 		
 		
@@ -66,36 +66,38 @@ public class Sistema_Cenario1 extends Sistema{
 		evento = new Evento(null, TiposEvento.CHEGADA_PEER, tempo);
 		listaEventos.add(evento);
 		
-		for(Evento eventoLista : listaEventos) {
-			TiposEvento tipoEvento = eventoLista.getTipoEvento();
-			if(tipoEvento == TiposEvento.UPLOAD_PUBLISHER) {
+		for(int i = 0; i <= TAM_SIMULACAO; i++) {
+			Evento eventoLista = listaEventos.get(i);
+			switch (eventoLista.getTipoEvento()) {
+			case UPLOAD_PUBLISHER:
 				tempo = tempo + uploadPublisher.gerar();
 				trataEventoUploadPublisher(tempo);
-				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
-			}
-			if(tipoEvento == TiposEvento.CHEGADA_PEER) {
+				System.out.println("tipoEvento: " + TiposEvento.UPLOAD_PUBLISHER + " - tempo: " + tempo);
+				break;
+			case CHEGADA_PEER:
 				double tempoEntrada = eventoLista.getTempoOcorrenciaEvento();
 				double tempoChegada = tempo + chegadaPeer.gerar();
 				tempo = tempoChegada;
-				double tempoUpload = tempo + uploadPeer.gerar();
-				tempo = tempoUpload;
-				trataEventoChegadaPeer(tempoEntrada, tempoChegada, tempoUpload);  
-				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
-			}
-			if(tipoEvento == TiposEvento.UPLOAD_PEER) {
+				double tempoUploadChegada = tempo + uploadPeer.gerar();
+				tempo = tempoUploadChegada;
+				trataEventoChegadaPeer(tempoEntrada, tempoChegada, tempoUploadChegada);  
+				System.out.println("tipoEvento: " + TiposEvento.CHEGADA_PEER + " - tempo: " + tempo);
+				break;
+			case UPLOAD_PEER:
 				Peer peer = eventoLista.getPeer();
 				double tempoUpload = tempo + uploadPeer.gerar();
 				tempo = tempoUpload;
 				double tempoSaida = tempo + saidaPeer;
 				tempo = tempoSaida;
 				trataEventoUploadPeer(tempoUpload, peer, tempoSaida);
-				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
-			}
-			if(tipoEvento == TiposEvento.SAIDA_PEER) {
-				Peer peer = eventoLista.getPeer();
+				System.out.println("tipoEvento: " + TiposEvento.UPLOAD_PEER + " - tempo: " + tempo);
+				break;
+			case SAIDA_PEER:
+				Peer peerSaida = eventoLista.getPeer();
 				tempo = tempo + chegadaPeer.gerar();
-				trataEventoSaidaPeer(tempo, peer);
-				System.out.println("tipoEvento: " + tipoEvento + " - tempo: " + tempo);
+				trataEventoSaidaPeer(tempo, peerSaida);
+				System.out.println("tipoEvento: " + TiposEvento.SAIDA_PEER + " - tempo: " + tempo);
+				break;
 			}
 			
 		}
