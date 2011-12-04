@@ -9,6 +9,7 @@ import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Publisher;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
+import br.ufrj.im.dcc.avaliacaodesempenho.simulacao.Sistema_Cenario1;
 import br.ufrj.im.dcc.avaliacaodesempenho.utils.Exponencial;
 import br.ufrj.im.dcc.avaliacaodesempenho.utils.Funcoes;
 
@@ -54,6 +55,9 @@ public class Start {
 		
 		TiposEvento tipoEvento = new TiposEvento();
 		
+
+		Sistema_Cenario1 sc1 = new Sistema_Cenario1();
+		sc1.simulacao();
 	}
 
 //	/**
