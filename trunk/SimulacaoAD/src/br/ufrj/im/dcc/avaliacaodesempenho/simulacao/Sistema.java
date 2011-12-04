@@ -1,6 +1,7 @@
 package br.ufrj.im.dcc.avaliacaodesempenho.simulacao;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import br.ufrj.im.dcc.avaliacaodesempenho.distribuicoes.Uniforme;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Bloco;
@@ -17,7 +18,7 @@ import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
  * */
 public class Sistema {
 	private Uniforme uniforme;
-	protected ArrayList<Evento> listaEventos;
+	protected Set<Evento> listaEventos;
 	protected Publisher publisher;
 	protected ArrayList<Peer> peers;
 	protected boolean sistemaAberto;
