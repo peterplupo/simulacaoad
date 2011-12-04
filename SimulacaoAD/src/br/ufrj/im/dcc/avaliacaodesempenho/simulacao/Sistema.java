@@ -7,8 +7,8 @@ import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Publisher;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.Evento;
 import br.ufrj.im.dcc.avaliacaodesempenho.eventos.TiposEvento;
-import br.ufrj.im.dcc.avaliacaodesempenho.utils.Exponencial;
 import br.ufrj.im.dcc.avaliacaodesempenho.utils.Funcoes;
+import br.ufrj.im.dcc.avaliacaodesempenho.utils.Uniforme;
 
 
 /**
@@ -18,6 +18,7 @@ import br.ufrj.im.dcc.avaliacaodesempenho.utils.Funcoes;
  * */
 public class Sistema {
 	private Funcoes funcoes;
+	private Uniforme uniforme;
 	protected ArrayList<Evento> listaEventos;
 	protected Publisher publisher;
 	protected ArrayList<Peer> peers;
@@ -27,7 +28,8 @@ public class Sistema {
 	private double tempoMedioPermaneciaSistema = 0.0;
 	
 	
-	public Sistema() {
+	public Sistema(long seed) {
+		uniforme = new Uniforme(seed);
 		funcoes = new Funcoes();
 	}
 
@@ -52,14 +54,14 @@ public class Sistema {
 			
 		} else {
 			//publisher faz escolha peer
-			int peerEscolhido = funcoes.geraUniforme(qtdPeersSistema);
+			int peerEscolhido = uniforme.geraUniforme(qtdPeersSistema);
 			
 			//publisher faz escolha bloco
 			ArrayList<Bloco> blocosNaoComuns = funcoes.buscaBlocosNaoComuns(publisher.getBlocosSistema(), peers.get(peerEscolhido).getBlocosPeer());
 			
 			if(blocosNaoComuns.size() > 0) {
 				int qtdBlocos = blocosNaoComuns.size();
-				int blocoEscolhido = funcoes.geraUniforme(qtdBlocos);
+				int blocoEscolhido = uniforme.geraUniforme(qtdBlocos);
 				Bloco bloco = publisher.getBlocosSistema().get(blocoEscolhido);
 				
 				//publisher envia bloco para peer
@@ -120,10 +122,10 @@ public class Sistema {
 		//peer faz escolha de peer diferente de si proprio
 		int indicePeerAtual = peers.indexOf(peer);
 		int qtdPeersSistema = peers.size();
-		int peerEscolhido = funcoes.geraUniforme(qtdPeersSistema);
+		int peerEscolhido = uniforme.geraUniforme(qtdPeersSistema);
 		
 		while(indicePeerAtual == peerEscolhido) {
-			peerEscolhido = funcoes.geraUniforme(qtdPeersSistema);
+			peerEscolhido = uniforme.geraUniforme(qtdPeersSistema);
 		}
 		
 		//peer faz escolha bloco
@@ -131,7 +133,7 @@ public class Sistema {
 		
 		if(blocosNaoComuns.size() != 0) {
 			int qtdBlocos = blocosNaoComuns.size();
-			int blocoEscolhido = funcoes.geraUniforme(qtdBlocos);
+			int blocoEscolhido = uniforme.geraUniforme(qtdBlocos);
 			Bloco bloco = peer.getBlocosPeer().get(blocoEscolhido);
 			
 			//peer envia bloco para peer escolhido
