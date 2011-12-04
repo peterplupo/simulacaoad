@@ -8,24 +8,23 @@ package br.ufrj.im.dcc.avaliacaodesempenho.estrutura;
 public class Bloco {
 	
 	/* Define a forma de dintincao entre os blocos*/
-	private String chaveBloco;
+	private int chaveBloco;
 
 	public Bloco(int numeroBloco) {
-		this.chaveBloco = "BLOCO_" + numeroBloco;
+		this.chaveBloco = numeroBloco;
+	}
+	
+	public int getChaveBloco() {
+		return chaveBloco;
 	}
 
-	
-	
-	/* HASHCODE e EQUALS. */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((chaveBloco == null) ? 0 : chaveBloco.hashCode());
+		result = prime * result + chaveBloco;
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -36,21 +35,9 @@ public class Bloco {
 		if (getClass() != obj.getClass())
 			return false;
 		Bloco other = (Bloco) obj;
-		if (chaveBloco == null) {
-			if (other.chaveBloco != null)
-				return false;
-		} else if (!chaveBloco.equals(other.chaveBloco))
+		if (chaveBloco != other.chaveBloco)
 			return false;
 		return true;
 	}
 
-	
-	/* GETTER e SETTER. */
-	public String getChaveBloco() {
-		return chaveBloco;
-	}
-
-
-	
-	
 }
