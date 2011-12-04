@@ -1,7 +1,7 @@
 package br.ufrj.im.dcc.avaliacaodesempenho.simulacao;
 
 import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.PriorityQueue;
 
 import br.ufrj.im.dcc.avaliacaodesempenho.distribuicoes.Exponencial;
 import br.ufrj.im.dcc.avaliacaodesempenho.estrutura.Peer;
@@ -42,7 +42,7 @@ public class Sistema_Cenario1 extends Sistema{
 		
 		peers = new ArrayList<Peer>();
 		publisher = new Publisher(this.numeroBlocos);
-		listaEventos = new ArrayList<Evento>();
+		listaEventos = new PriorityQueue<Evento>();
 		sistemaAberto = true;
 		
 		
@@ -67,7 +67,7 @@ public class Sistema_Cenario1 extends Sistema{
 		listaEventos.add(evento);
 		
 		for(int i = 0; i < TAM_SIMULACAO; i++) {
-			Evento eventoLista = listaEventos.get(i);
+			Evento eventoLista = listaEventos.poll();
 			switch (eventoLista.getTipoEvento()) {
 			case UPLOAD_PUBLISHER:
 				tempo = tempo + uploadPublisher.gerar();
