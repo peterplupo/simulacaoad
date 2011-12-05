@@ -77,11 +77,18 @@ public class Sistema {
 						//adicionando evento Saida Peer na lista de eventos.
 						evento = new Evento(peer, TiposEvento.SAIDA_PEER, tempoSaidaPeer);
 						listaEventos.add(evento);
-					}
-					//adicionar possivel upload para seed.
-					if(tempoUploadPeer < tempoSaidaPeer) {
-						evento = new Evento(peer, TiposEvento.UPLOAD_PEER, tempoUploadPeer);
-						listaEventos.add(evento);
+						
+						//adicionar possivel upload para seed.
+						if(tempoUploadPeer < tempoSaidaPeer) {
+							evento = new Evento(peer, TiposEvento.UPLOAD_PEER, tempoUploadPeer);
+							listaEventos.add(evento);
+						}
+					} else {
+						//adicionar possivel upload para seed.
+						if(tempoUploadPeer < peer.getInstanteSaidaSistema()) {
+							evento = new Evento(peer, TiposEvento.UPLOAD_PEER, tempoUploadPeer);
+							listaEventos.add(evento);
+						}
 					}
 					
 				} else {
