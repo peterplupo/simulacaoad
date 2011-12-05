@@ -17,6 +17,7 @@ public class Sistema_Cenario1 extends Sistema{
 	private double mi;          //taxa de upload de peers e seeds
 	private double gama;        //taxa de saida dos peers
 	private double u;           //taxa upload publisher
+	private int p;
 	private int numeroBlocos;
 	
 	private Exponencial uploadPublisher;
@@ -32,6 +33,7 @@ public class Sistema_Cenario1 extends Sistema{
 		this.mi = 0.1;           // tanto faz já que sai do sistema imediatamente apos virar seed
 		this.gama = 0.0;         // quer dizer que o peer sai imediatamente apos virar seed
 		this.u = 1.0;
+		this.p = 0;
 		this.numeroBlocos = 1;
 		this.tempo = 0.0;
 		
@@ -70,8 +72,11 @@ public class Sistema_Cenario1 extends Sistema{
 			Evento eventoLista = listaEventos.poll();
 			switch (eventoLista.getTipoEvento()) {
 			case UPLOAD_PUBLISHER:
-				tempo = tempo + uploadPublisher.gerar();
-				trataEventoUploadPublisher(tempo);
+				double tempoUploadPublisher = tempo + uploadPublisher.gerar();
+				double tempoUploadPeer = tempo + uploadPeer.gerar();
+				double tempoSaidaPeer = tempo + saidaPeer;
+				tempo = Math.max(Math.max(tempoUploadPublisher, tempoUploadPeer), tempoSaidaPeer);
+				trataEventoUploadPublisher(tempoUploadPublisher, tempoUploadPeer, tempoSaidaPeer);
 				System.out.println("tipoEvento: " + TiposEvento.UPLOAD_PUBLISHER + " - tempo: " + tempo);
 				break;
 			case CHEGADA_PEER:
@@ -80,22 +85,29 @@ public class Sistema_Cenario1 extends Sistema{
 				tempo = tempoChegada;
 				double tempoUploadChegada = tempo + uploadPeer.gerar();
 				tempo = tempoUploadChegada;
-				trataEventoChegadaPeer(tempoEntrada, tempoChegada, tempoUploadChegada);  
+				trataEventoChegadaPeer(tempoEntrada, tempoChegada, tempoUploadChegada, numeroBlocos);  
 				System.out.println("tipoEvento: " + TiposEvento.CHEGADA_PEER + " - tempo: " + tempo);
 				break;
 			case UPLOAD_PEER:
 				Peer peer = eventoLista.getPeer();
 				double tempoUpload = tempo + uploadPeer.gerar();
-				tempo = tempoUpload;
+				//tempo = tempoUpload;
 				double tempoSaida = tempo + saidaPeer;
-				tempo = tempoSaida;
+				//tempo = tempoSaida;
+				
+				tempo = Math.max(tempoUpload, tempoSaida);
+				
 				trataEventoUploadPeer(tempoUpload, peer, tempoSaida);
 				System.out.println("tipoEvento: " + TiposEvento.UPLOAD_PEER + " - tempo: " + tempo);
 				break;
 			case SAIDA_PEER:
 				Peer peerSaida = eventoLista.getPeer();
 				tempo = tempo + chegadaPeer.gerar();
-				trataEventoSaidaPeer(tempo, peerSaida);
+				boolean recomenda = false;
+				if(uniforme.geraProbabilidade() < p) {
+					recomenda = true;
+				}
+				trataEventoSaidaPeer(tempo, peerSaida, recomenda);
 				System.out.println("tipoEvento: " + TiposEvento.SAIDA_PEER + " - tempo: " + tempo);
 				break;
 			}

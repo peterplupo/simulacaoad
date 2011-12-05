@@ -14,5 +14,9 @@ public class Uniforme {
 	public int geraUniforme(int i) {
 		return random.nextInt(i);
 	}
+	
+	public double geraProbabilidade(){
+		return random.nextDouble();
+	}
 
 }
