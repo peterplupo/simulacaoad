@@ -92,7 +92,7 @@ public class Peer {
 				}
 			}
 			if (frequency == Integer.MAX_VALUE) {
-				return chosenPeer;
+				return null; //no upload was done.
 			}
 		//send any random block
 		} else {
