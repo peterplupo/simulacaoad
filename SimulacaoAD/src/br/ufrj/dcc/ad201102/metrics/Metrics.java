@@ -16,6 +16,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class Metrics {
 	
+	private static int currentBatch = -1;
+	
 	private static Map<Integer, Map<Double, Double>> downloadTimes = new TreeMap<Integer, Map<Double, Double>>();
 	private static Map<Integer, Map<Double, Integer>> populationSize = new TreeMap<Integer, Map<Double, Integer>>();
 	private static Map<Integer, Collection<Double>> exits = new TreeMap<Integer, Collection<Double>>();
@@ -28,9 +30,25 @@ public class Metrics {
 		downloadTimes = new TreeMap<Integer, Map<Double, Double>>();
 		populationSize = new TreeMap<Integer, Map<Double, Integer>>();
 		exits = new TreeMap<Integer, Collection<Double>>();
+		currentBatch = -1;
+	}
+	
+	public static boolean checkCurrentBatch(int batchNumber) {
+		//ignores from previous batches
+		if (currentBatch > batchNumber) {
+			return false;
+		}
+		//sets the current batch
+		if (currentBatch < batchNumber) {
+			currentBatch = batchNumber;
+		}
+		return true;
 	}
 	
 	public static void addDownloadTime(int batchNumber, double time, double downloadTime) {
+		if (checkCurrentBatch(batchNumber)) {
+			return;
+		}
 		Map<Double, Double> batchDownloadTimes = downloadTimes.get(batchNumber);
 		if (batchDownloadTimes == null) {
 			batchDownloadTimes = new TreeMap<Double, Double>();
@@ -40,6 +58,9 @@ public class Metrics {
 	}
 	
 	public static void addPopulationSize(int batchNumber, double time, int size) {
+		if (checkCurrentBatch(batchNumber)) {
+			return;
+		}
 		Map<Double, Integer> batchPopulationSize = populationSize.get(batchNumber);
 		if (batchPopulationSize == null) {
 			batchPopulationSize = new TreeMap<Double, Integer>();
@@ -49,6 +70,9 @@ public class Metrics {
 	}
 	
 	public static void addExit(int batchNumber, double time) {
+		if (checkCurrentBatch(batchNumber)) {
+			return;
+		}
 		Collection<Double> batchExits = exits.get(batchNumber);
 		if (batchExits == null) {
 			batchExits = new ArrayList<Double>();
