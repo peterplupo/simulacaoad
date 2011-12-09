@@ -54,6 +54,7 @@ public class TorrentSimulator {
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
 		Metrics.generateReport();
+		
 	}
 	
 	public TorrentSimulator(double lambda, int blocksNumber, double mi,
