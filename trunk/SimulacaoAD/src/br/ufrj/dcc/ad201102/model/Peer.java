@@ -34,7 +34,7 @@ public class Peer {
 	
 	public void setSeed(boolean seed) {
 		this.seed = seed;
-		System.out.println(getId() + " is now a seed.");
+		System.out.println(toString() + " is now a seed.");
 	}
 	
 	public boolean[] getSignature() {
@@ -54,7 +54,8 @@ public class Peer {
 		}
 	}
 	
-	public String getId() {
+	@Override
+	public String toString() {
 		return id;
 	}
 	
