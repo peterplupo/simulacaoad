@@ -2,6 +2,8 @@ package br.ufrj.dcc.ad201102.events;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+
 import br.ufrj.dcc.ad201102.data.BatchData;
 import br.ufrj.dcc.ad201102.engine.Exponential;
 import br.ufrj.dcc.ad201102.engine.Uniform;
@@ -9,6 +11,8 @@ import br.ufrj.dcc.ad201102.model.Peer;
 
 public class ExitEvent extends Event {
 
+	private static Logger logger = Logger.getLogger(ExitEvent.class);
+	
 	public static Exponential EXIT_CLOCK;
 	public static double P;
 	public static Uniform EXIT_PROBABILITY;
@@ -25,7 +29,7 @@ public class ExitEvent extends Event {
 		}
 		batchData.addPopulationSize(time, peers.size());
 		batchData.addExit(time);
-		System.out.println(batchData + " " + peer + " Exit at " + time + " added to metrics. Pop. size " + (peers.size()+1) + " added to metrics.");
+		logger.debug(batchData + " " + peer + " Exit time measure " + time + " and population size measure " + peers.size() + "registered.");
 	}
 
 }
