@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
 
+import br.ufrj.dcc.ad201102.data.BatchData;
+import br.ufrj.dcc.ad201102.data.Measurement;
 import br.ufrj.dcc.ad201102.events.ArrivalEvent;
 import br.ufrj.dcc.ad201102.events.Event;
 import br.ufrj.dcc.ad201102.events.ExitEvent;
 import br.ufrj.dcc.ad201102.events.PeerUploadEvent;
 import br.ufrj.dcc.ad201102.events.PublisherUploadEvent;
-import br.ufrj.dcc.ad201102.metrics.Metrics;
 import br.ufrj.dcc.ad201102.model.Peer;
 import br.ufrj.dcc.ad201102.model.Publisher;
+import br.ufrj.dcc.ad201102.report.ReportGenerator;
 
 
 //otimizações:
@@ -39,7 +41,7 @@ public class TorrentSimulator {
 		SimulationParameters params = new SimulationParameters();
 		
 		params.lambda = 0.1;
-		params.blocksNumber = 100;
+		params.blocksNumber = 10;
 		params.mi = 0.1;
 		params.u = 1;
 		params.gama = 0.1;
@@ -47,13 +49,13 @@ public class TorrentSimulator {
 		params.initialPopulationSize = 0;
 		params.blockRarity = false;
 		params.randomSeed = 0;
-		params.batchSize = 50000;
-		params.batches = 2;
+		params.batchSize = 300;
+		params.batches = 800;
 		params.transientSize = 3000;
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
-		Metrics.generateReport();
+		ReportGenerator.getPopulationReport(Measurement.getBatchData(false));
 		
 	}
 	
@@ -73,7 +75,7 @@ public class TorrentSimulator {
 		this.batchSize = batchSize;
 		this.batches = batches;
 		this.transientSize = transientSize;
-		Metrics.reset();
+		Measurement.reset();
 	}
 
 
@@ -109,43 +111,65 @@ public class TorrentSimulator {
 		Publisher publisher = new Publisher(Peer.BLOCKS_NUMBER);
 		Collection<Peer> peers = new ArrayList<Peer>();
 		
+		Measurement.setTransientBatch(transientSize != 0);
+		double currentTime = 0;
+		BatchData batchData = null;
 		
-		if (initialPopulationSize == 0) {
-			if (transientSize != 0) {
-				events.add(new ArrivalEvent(0 + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, -1));
-			} else {
-				events.add(new ArrivalEvent(0 + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, 0));
+		if (Measurement.hasTransientBatch()) {
+			batchData = Measurement.getTransientBatchData();
+			init(events, publisher, peers, currentTime, batchData);
+			
+			System.out.println(-1 + " transient started at "+ currentTime +".");
+			for (int transientCounter = 0; transientCounter < transientSize; transientCounter++) {
+				Event currentEvent = events.poll();
+				currentTime = currentEvent.getTime();
+				if (transientCounter == 0) {
+					batchData.setStartTime(currentTime);
+				}
+				events.addAll(currentEvent.nextEvents(batchData));
 			}
+			batchData.setEndTime(currentTime);
+			System.out.println(-1 + " transient finished at "+ currentTime +".");
+		} else {
+			batchData = Measurement.getBatchData(0);
+			init(events, publisher, peers, currentTime, batchData);
+		}
+		
+		for (int batchNumber = 0; batchNumber < batches; batchNumber++) {
+			batchData = Measurement.getBatchData(batchNumber);
+			batchData.setInitialPopulation(peers.size());
+			for (int batchEvent = 0; batchEvent< batchSize; batchEvent++) {
+				Event currentEvent = events.poll();
+				currentTime = currentEvent.getTime();
+				
+				if (batchEvent == 0) {
+					batchData.setStartTime(currentTime);
+					System.out.println(batchNumber + " batch started at "+ currentTime +".");
+				}
+				
+				events.addAll(currentEvent.nextEvents(batchData));
+				
+				if (batchEvent % 1000 == 0) {
+					System.gc();
+				}
+			}
+			batchData.setEndTime(currentTime);
+			System.out.println(batchNumber + " batch finished at "+ currentTime +".");
+		}
+		
+		System.out.println("Simulation end.");
+	}
+
+	private void init(PriorityQueue<Event> events, Publisher publisher,
+			Collection<Peer> peers, double currentTime, BatchData batchData) {
+		if (initialPopulationSize == 0) {
+			events.add(new ArrivalEvent(currentTime + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, batchData));
 		} else {
 			for (int i = 1; i < initialPopulationSize; i++) {
 				peers.add(new Peer());
 			}
 		}
-		
-		if (transientSize != 0) {
-			events.add(new PublisherUploadEvent(0 + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, -1));
-		} else {
-			events.add(new PublisherUploadEvent(0 + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, 0));
-		}
-		
-		if (transientSize != 0) {
-			System.out.println(-1 + " transient started.");
-		}
-		
-		for (int trans = 0; trans < transientSize; trans++) {
-			events.addAll(events.poll().nextEvents(-1));
-		}
-		
-		for (int batchNumber = 0; batchNumber < batches; batchNumber++) {
-			System.out.println(batchNumber + " batch started.");
-			for (int batchEvent = 0; batchEvent< batchSize; batchEvent++) {
-				events.addAll(events.poll().nextEvents(batchNumber));
-				if (batchEvent % 1000 == 0) {
-					System.gc();
-				}
-			}
-		}
-		System.out.println("Simulation end.");
+		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData));
 	}
 	
 	public static class SimulationParameters {
