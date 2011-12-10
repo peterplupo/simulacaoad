@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
 
+import org.apache.log4j.Logger;
+
 import br.ufrj.dcc.ad201102.data.BatchData;
 import br.ufrj.dcc.ad201102.data.Measurement;
 import br.ufrj.dcc.ad201102.events.ArrivalEvent;
@@ -16,12 +18,15 @@ import br.ufrj.dcc.ad201102.model.Publisher;
 import br.ufrj.dcc.ad201102.report.ReportGenerator;
 
 
+
 //otimizações:
 //1 só enviar blocos úteis
 //2 download ao invés de upload (melhora?)
 //3 enviar e receber simultaneamente (pode? não é só a política de escolha e de envio que pode mudar?)
 
 public class TorrentSimulator {
+	
+	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
 	
 	double lambda;
 	int blocksNumber;
@@ -49,8 +54,8 @@ public class TorrentSimulator {
 		params.initialPopulationSize = 0;
 		params.blockRarity = false;
 		params.randomSeed = 0;
-		params.batchSize = 300;
-		params.batches = 800;
+		params.batchSize = 1000;
+		params.batches = 400;
 		params.transientSize = 3000;
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
@@ -119,7 +124,7 @@ public class TorrentSimulator {
 			batchData = Measurement.getTransientBatchData();
 			init(events, publisher, peers, currentTime, batchData);
 			
-			System.out.println(-1 + " transient started at "+ currentTime +".");
+			logger.info(-1 + " transient started at "+ currentTime +".");
 			for (int transientCounter = 0; transientCounter < transientSize; transientCounter++) {
 				Event currentEvent = events.poll();
 				currentTime = currentEvent.getTime();
@@ -129,7 +134,7 @@ public class TorrentSimulator {
 				events.addAll(currentEvent.nextEvents(batchData));
 			}
 			batchData.setEndTime(currentTime);
-			System.out.println(-1 + " transient finished at "+ currentTime +".");
+			logger.info(-1 + " transient finished at "+ currentTime +".");
 		} else {
 			batchData = Measurement.getBatchData(0);
 			init(events, publisher, peers, currentTime, batchData);
@@ -144,7 +149,7 @@ public class TorrentSimulator {
 				
 				if (batchEvent == 0) {
 					batchData.setStartTime(currentTime);
-					System.out.println(batchNumber + " batch started at "+ currentTime +".");
+					logger.info(batchNumber + " batch started at "+ currentTime +".");
 				}
 				
 				events.addAll(currentEvent.nextEvents(batchData));
@@ -154,10 +159,10 @@ public class TorrentSimulator {
 				}
 			}
 			batchData.setEndTime(currentTime);
-			System.out.println(batchNumber + " batch finished at "+ currentTime +".");
+			logger.info(batchNumber + " batch finished at "+ currentTime +".");
 		}
 		
-		System.out.println("Simulation end.");
+		logger.info("Simulation end.");
 	}
 
 	private void init(PriorityQueue<Event> events, Publisher publisher,

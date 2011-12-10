@@ -2,12 +2,16 @@ package br.ufrj.dcc.ad201102.events;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+
 import br.ufrj.dcc.ad201102.data.BatchData;
 import br.ufrj.dcc.ad201102.engine.Exponential;
 import br.ufrj.dcc.ad201102.model.Peer;
 
 public class ArrivalEvent extends Event {
 
+	private static Logger logger = Logger.getLogger(ArrivalEvent.class);
+	
 	public static Exponential PEERS_ARRIVAL;
 	public static int MAX_PEERS;
 	
@@ -21,9 +25,9 @@ public class ArrivalEvent extends Event {
 		if (MAX_PEERS == 0 || peers.size() < MAX_PEERS) {
 			peer.setArrivalTime(time);
 			peers.add(peer);
-			System.out.println(batchData + " " + peer + " arrived at " + time + ". Population size " + (peers.size()+1) + " added to metrics.");
 			batchData.addPopulationSize(time, peers.size());
 			events.add(new PeerUploadEvent(time + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom(), peer, peers, newBatchData));
+			logger.debug(batchData + " " + peer + " arrived at " + time + ". Population size measure " + peers.size() + " registered.");
 		}
 	}
 
