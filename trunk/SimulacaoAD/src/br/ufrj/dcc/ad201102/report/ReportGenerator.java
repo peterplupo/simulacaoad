@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
@@ -22,17 +23,38 @@ public class ReportGenerator {
 
 		XYSeries series = new XYSeries("Media da população");
 		
-		
+		Map<Integer, Double> popProbDistRun = new TreeMap<Integer, Double>();
+		double startTime = 0;
+		double endTime = 0;
+		boolean firstBatch = true;
 		for (BatchData batch : batches) {
-			series.add(batch.getBatchNumber(), batch.getMeanPopulation());
+			if (firstBatch) {
+				startTime = batch.getStartTime();
+				firstBatch = false;
+			}
+			endTime = batch.getEndTime();
+//			series.add(batch.getBatchNumber(), batch.getMeanPopulation());
+			Map<Integer, Double> popProbDistBatch = batch.getPopulationProbabilityDistribution();
+			for (Map.Entry<Integer, Double> prob : popProbDistBatch.entrySet()) {
+				if (popProbDistRun.get(prob.getKey()) == null) {
+					popProbDistRun.put(prob.getKey(), prob.getValue());
+				} else {
+					popProbDistRun.put(prob.getKey(), popProbDistRun.get(prob.getKey()) + prob.getValue());
+				}
+			}
+			
+		}
+		
+		for (Map.Entry<Integer, Double> prob : popProbDistRun.entrySet()) {
+			series.add((Number)(prob.getKey()/(endTime-startTime)), prob.getValue());
 		}
 		
 		data.addSeries(series);
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
-            "Média",
-            "Rodadas", 
-            "Média da população", 
+            "PMF população",
+            "Tempo", 
+            "Tamanho da população", 
             data,
             PlotOrientation.VERTICAL,
             true,
@@ -64,7 +86,6 @@ public class ReportGenerator {
 			
 			for (Map.Entry<Double, Integer> population : batch.getPopulationSize().entrySet()) {
 				sumPopulation = sumPopulation + population.getValue();
-				System.out.println(sumPopulation);
 				series.add(population.getKey()-batch.getStartTime(), (Number)sumPopulation);
 			}
 			data.addSeries(series);

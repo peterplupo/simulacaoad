@@ -79,6 +79,27 @@ public class BatchData implements Comparable<BatchData> {
 		}
 	}
 	
+	public Map<Integer, Double> getPopulationProbabilityDistribution() {
+		double lastTime = getStartTime();
+		int lastPop = getInitialPopulation();
+		Map<Integer, Double> popProbDist = new TreeMap<Integer, Double>();
+		
+		if (getPopulationSize().size() == 0) {
+			popProbDist.put(getInitialPopulation(), getEndTime() - getStartTime());
+		} else {
+			for (Map.Entry<Double, Integer> size : getPopulationSize().entrySet()) {
+				if (popProbDist.get(lastPop) == null) {
+					popProbDist.put(lastPop,size.getKey()-lastTime);
+				} else {
+					popProbDist.put(lastPop,popProbDist.get(lastPop) + size.getKey()-lastTime);
+				}
+				lastPop = size.getValue();
+				lastTime = size.getKey();
+			}
+		}
+		return popProbDist;
+	}
+	
 	public void addDownloadTime(double time, double downloadTime) {
 		if (invalidTime(time)) {
 			return;
