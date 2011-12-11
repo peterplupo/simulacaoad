@@ -73,6 +73,7 @@ public class Peer {
 		//transverse through all peers in no order (shuffled collection)
 //		for (Peer peer : shuffledPeers) {
 			//compare signatures
+			//FIXME verificar se a diferença significa que ele NÃO tem algo que a gente tem.
 //			if (!peer.signature.equals(signature)) {
 //				chosenPeer = peer;
 				//a peer with different signature was found and is going to receive a block
@@ -108,6 +109,8 @@ public class Peer {
 			if (candidateBlocks.size() != 0) {
 				Collections.shuffle(candidateBlocks, CHOICES.getRandom());
 				blockNumber = candidateBlocks.get(0);
+			} else {
+				return null;
 			}
 		}
 		chosenPeer.addBlock(blockNumber);

@@ -6,7 +6,7 @@
 	<appender name="console" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%p (%F:%L): %25m%n" />
+			<param name="ConversionPattern" value="%p %25m%n" /> <!-- (%F:%L) class:line -->
 		</layout>
 	</appender>
 
@@ -20,7 +20,7 @@
 	</appender>
 
 	<logger name="br.ufrj.dcc.ad201102">
-        <level value="off"/>
+        <level value="info"/>
     </logger>
 
 	<root>

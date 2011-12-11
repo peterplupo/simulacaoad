@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
+
 public class BatchData implements Comparable<BatchData> {
 	
 	private double startTime;
@@ -12,8 +14,10 @@ public class BatchData implements Comparable<BatchData> {
 	private int initialPopulation;
 	private String id;
 	private Map<Double, Double> downloadTimes = new TreeMap<Double, Double>();
+	private DescriptiveStatistics downloadTimesStatistics = new DescriptiveStatistics();
 	private Map<Double, Integer> populationSize = new TreeMap<Double, Integer>();
 	private Collection<Double> exits = new TreeSet<Double>();
+	private DescriptiveStatistics exitsStatistics = new DescriptiveStatistics();
 	private int batchNumber;
 
 	public BatchData(int batchNumber) {
@@ -54,13 +58,33 @@ public class BatchData implements Comparable<BatchData> {
 			return;
 		}
 		exits.add(time);
+		exitsStatistics.addValue(time);
 	}
-
+	
+	public double getMeanPopulation() {
+		double lastTime = getStartTime();
+		double lastPop = getInitialPopulation();
+		
+		if (getPopulationSize().size() == 0) {
+			return getInitialPopulation();
+		} else {
+			DescriptiveStatistics stat = new DescriptiveStatistics();
+			for (Map.Entry<Double, Integer> size : getPopulationSize().entrySet()) {
+				stat.addValue(lastPop*(size.getKey()-lastTime));
+				lastPop = size.getValue();
+				lastTime = size.getKey();
+			}
+			//sumPairs(means.toArray(new Double[means.size()]))[0]
+			return stat.getSum()/(getEndTime() - getStartTime());
+		}
+	}
+	
 	public void addDownloadTime(double time, double downloadTime) {
 		if (invalidTime(time)) {
 			return;
 		}
 		downloadTimes.put(time, downloadTime);
+		downloadTimesStatistics.addValue(downloadTime);
 	}
 
 	public int getBatchNumber() {
@@ -90,5 +114,13 @@ public class BatchData implements Comparable<BatchData> {
 	@Override
 	public int compareTo(BatchData o) {
 		return new Integer(batchNumber).compareTo(o.batchNumber);
+	}
+
+	public double getMeanDownloadTime() {
+		return downloadTimesStatistics.getMean();
+	}
+
+	public Collection<Double> getDownloadTimes() {
+		return downloadTimes.values();
 	}
 }
