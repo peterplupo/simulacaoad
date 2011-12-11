@@ -123,4 +123,9 @@ public class BatchData implements Comparable<BatchData> {
 	public Collection<Double> getDownloadTimes() {
 		return downloadTimes.values();
 	}
+	
+	public int getExits() {
+		return exits.size();
+	}
+	
 }

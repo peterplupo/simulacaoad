@@ -46,7 +46,7 @@ public class TorrentSimulator {
 		SimulationParameters params = new SimulationParameters();
 		
 		params.lambda = 0.1;
-		params.blocksNumber = 1;
+		params.blocksNumber = 10;
 		params.mi = 0.1;
 		params.u = 1;
 		params.gama = 0.1;
@@ -54,14 +54,14 @@ public class TorrentSimulator {
 		params.initialPopulationSize = 0;
 		params.blockRarity = false;
 		params.randomSeed = 0;
-		params.batchSize = 10;
+		params.batchSize = 200;
 		params.batches = 10;
-		params.transientSize = 0;
+		params.transientSize = 500;
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
-		ReportGenerator.getPopulationReport(Measurement.getBatchData(false));
-		
+		ReportGenerator.getPopulationPMF(Measurement.getBatchData(false));
+		ReportGenerator.getPopulationCDF(Measurement.getBatchData(false));
 	}
 	
 	public TorrentSimulator(double lambda, int blocksNumber, double mi,
@@ -142,7 +142,6 @@ public class TorrentSimulator {
 		
 		int batchNumber = 0;
 		while(!Measurement.confidenceInterval95()) {
-			System.out.println(Measurement.confidenceInterval95());
 			System.out.println(batchNumber);
 //		for (int batchNumber = 0; batchNumber < batches; batchNumber++) {
 			batchData = Measurement.getBatchData(batchNumber);
