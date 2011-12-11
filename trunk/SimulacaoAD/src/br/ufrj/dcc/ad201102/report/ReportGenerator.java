@@ -104,9 +104,9 @@ public class ReportGenerator {
 		
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
-            "Média",
-            "Rodadas", 
-            "Média da população", 
+            "CDF População",
+            "Tempo", 
+            "População acumulada", 
             data,
             PlotOrientation.VERTICAL,
             false,
