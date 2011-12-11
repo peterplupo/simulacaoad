@@ -142,8 +142,8 @@ public class TorrentSimulator {
 		
 		int batchNumber = 0;
 		while(!Measurement.confidenceInterval95()) {
-			System.out.println(batchNumber);
-//		for (int batchNumber = 0; batchNumber < batches; batchNumber++) {
+//			System.out.println(batchNumber);
+//		for (; batchNumber < 5000; batchNumber++) {
 			batchData = Measurement.getBatchData(batchNumber);
 			batchData.setInitialPopulation(peers.size());
 //			for (int batchEvent = 0; batchEvent< batchSize; batchEvent++) {
