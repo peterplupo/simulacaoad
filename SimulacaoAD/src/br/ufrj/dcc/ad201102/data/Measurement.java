@@ -68,6 +68,7 @@ public class Measurement {
 		}
 		//sumPairs(means.toArray(new Double[means.size()]))[0]
 		//2 * 1.96 = 3.92
+		System.out.println(3.92 * stat.getVariance()/Math.sqrt(stat.getN())<0.1*stat.getMean());
 		return 3.92 * stat.getVariance()/Math.sqrt(stat.getN())<0.1*stat.getMean();
 	}
 }
