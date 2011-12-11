@@ -39,14 +39,14 @@ public class TorrentSimulator {
 	long randomSeed;
 	int batchSize;
 	int batches;
-	private int transientSize = 100000;
+	private int transientSize = 100;
 	
 	public static void main(String[] args) {
 		
 		SimulationParameters params = new SimulationParameters();
 		
 		params.lambda = 0.1;
-		params.blocksNumber = 10;
+		params.blocksNumber = 1;
 		params.mi = 0.1;
 		params.u = 1;
 		params.gama = 0.1;
@@ -54,9 +54,9 @@ public class TorrentSimulator {
 		params.initialPopulationSize = 0;
 		params.blockRarity = false;
 		params.randomSeed = 0;
-		params.batchSize = 200;
+		params.batchSize = 25;
 		params.batches = 10;
-		params.transientSize = 500;
+		params.transientSize = 155;
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
@@ -142,6 +142,7 @@ public class TorrentSimulator {
 		
 		int batchNumber = 0;
 		while(!Measurement.confidenceInterval95()) {
+//			currentTime = 0;
 //			System.out.println(batchNumber);
 //		for (; batchNumber < 5000; batchNumber++) {
 			batchData = Measurement.getBatchData(batchNumber);
