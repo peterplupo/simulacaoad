@@ -35,10 +35,7 @@ public class Statistic {
 	}
 	
 	public static boolean ic95(Collection<Double> values) {
-        if (((2 * 1.96 * variance(values))/Math.sqrt(values.size()))<0.1*mean(values)) {
-        	return true;
-        }
-        return false;
+        return ((2 * 1.96 * variance(values))/Math.sqrt(values.size()))<0.1*mean(values);
 	}
 	
 	public static Double[] sumPairs(Double[] values) {

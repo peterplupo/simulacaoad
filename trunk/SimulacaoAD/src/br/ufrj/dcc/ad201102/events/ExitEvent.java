@@ -29,7 +29,7 @@ public class ExitEvent extends Event {
 		}
 		batchData.addPopulationSize(time, peers.size());
 		batchData.addExit(time);
-		logger.debug(batchData + " " + peer + " Exit time measure " + time + " and population size measure " + peers.size() + "registered.");
+		logger.debug(batchData + " " + peer + " Exit time measure " + time + " and population size measure " + peers.size() + " registered.");
 	}
 
 }

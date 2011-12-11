@@ -1,13 +1,11 @@
 package br.ufrj.dcc.ad201102.report;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
 
-import javax.swing.JFrame;
-
-import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
@@ -24,19 +22,7 @@ public class ReportGenerator {
 		
 		
 		for (BatchData batch : batches) {
-			
-			double lastTime = batch.getStartTime();
-			double lastPop = batch.getInitialPopulation();
-			
-			SummaryStatistics stat = new SummaryStatistics();
-			for (Map.Entry<Double, Integer> size : batch.getPopulationSize().entrySet()) {
-				stat.addValue(lastPop*(size.getKey()-lastTime));
-				lastPop = size.getValue();
-				lastTime = size.getKey();
-				
-			}
-			//sumPairs(means.toArray(new Double[means.size()]))[0]
-			series.add(batch.getBatchNumber(),  stat.getSum()/(batch.getEndTime() - batch.getStartTime()));
+			series.add(batch.getBatchNumber(), batch.getMeanPopulation());
 		}
 		
 		data.addSeries(series);
@@ -52,13 +38,18 @@ public class ReportGenerator {
             false
         );
         
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(chartPanel);
-        frame.pack();
-        frame.setVisible(true);
+        try {
+			ChartUtilities.saveChartAsPNG(new File("grafico.png"), chart, 600, 400);
+		} catch (IOException e) {
+		}
+        
+//        ChartPanel chartPanel = new ChartPanel(chart);
+//        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+//        JFrame frame = new JFrame();
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.getContentPane().add(chartPanel);
+//        frame.pack();
+//        frame.setVisible(true);
 	}
 
 }

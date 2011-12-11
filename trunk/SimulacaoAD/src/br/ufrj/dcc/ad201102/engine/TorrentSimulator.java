@@ -39,14 +39,14 @@ public class TorrentSimulator {
 	long randomSeed;
 	int batchSize;
 	int batches;
-	private int transientSize;
+	private int transientSize = 100000;
 	
 	public static void main(String[] args) {
 		
 		SimulationParameters params = new SimulationParameters();
 		
 		params.lambda = 0.1;
-		params.blocksNumber = 10;
+		params.blocksNumber = 1;
 		params.mi = 0.1;
 		params.u = 1;
 		params.gama = 0.1;
@@ -54,9 +54,9 @@ public class TorrentSimulator {
 		params.initialPopulationSize = 0;
 		params.blockRarity = false;
 		params.randomSeed = 0;
-		params.batchSize = 1000;
-		params.batches = 400;
-		params.transientSize = 3000;
+		params.batchSize = 10;
+		params.batches = 10;
+		params.transientSize = 0;
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
@@ -140,26 +140,34 @@ public class TorrentSimulator {
 			init(events, publisher, peers, currentTime, batchData);
 		}
 		
-		for (int batchNumber = 0; batchNumber < batches; batchNumber++) {
+		int batchNumber = 0;
+		while(!Measurement.confidenceInterval95()) {
+			System.out.println(Measurement.confidenceInterval95());
+			System.out.println(batchNumber);
+//		for (int batchNumber = 0; batchNumber < batches; batchNumber++) {
 			batchData = Measurement.getBatchData(batchNumber);
 			batchData.setInitialPopulation(peers.size());
-			for (int batchEvent = 0; batchEvent< batchSize; batchEvent++) {
+//			for (int batchEvent = 0; batchEvent< batchSize; batchEvent++) {
+			boolean firstEvent = true;
+			while (batchSize > batchData.getDownloadTimes().size()) {
 				Event currentEvent = events.poll();
 				currentTime = currentEvent.getTime();
 				
-				if (batchEvent == 0) {
+				if (firstEvent) {
+					firstEvent = false;
 					batchData.setStartTime(currentTime);
 					logger.info(batchNumber + " batch started at "+ currentTime +".");
 				}
 				
 				events.addAll(currentEvent.nextEvents(batchData));
 				
-				if (batchEvent % 1000 == 0) {
-					System.gc();
-				}
+//				if (batchEvent % 1000 == 0) {
+//					System.gc();
+//				}
 			}
 			batchData.setEndTime(currentTime);
 			logger.info(batchNumber + " batch finished at "+ currentTime +".");
+			batchNumber++;
 		}
 		
 		logger.info("Simulation end.");
