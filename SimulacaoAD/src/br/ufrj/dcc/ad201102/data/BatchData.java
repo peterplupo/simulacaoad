@@ -145,8 +145,27 @@ public class BatchData implements Comparable<BatchData> {
 		return downloadTimes.values();
 	}
 	
-	public int getExits() {
-		return exits.size();
+	public Collection<Double> getExits() {
+		return exits;
+	}
+	
+	public Map<Double, Double> getPopulationCDF() {
+		double sumPopulation = 0;
+		Map<Double, Double> timeSumPopulation = new TreeMap<Double, Double>();
+		double[][] timePopulationSeries = new double[getPopulationSize().size()][2];
+		
+		int i = 0;
+		for (Map.Entry<Double, Integer> population : getPopulationSize().entrySet()) {
+			sumPopulation = sumPopulation + population.getValue();
+			timePopulationSeries[i][0] = population.getKey();
+			timePopulationSeries[i][1] = sumPopulation;
+			i++;
+		}
+		
+		for (double[] timePopulation : timePopulationSeries) {
+			timeSumPopulation.put(timePopulation[0]-getStartTime(), timePopulation[1]/sumPopulation);
+		}
+		return timeSumPopulation;
 	}
 	
 }
