@@ -42,21 +42,20 @@ public class TorrentSimulator {
 	private int transientSize = 100;
 	
 	public static void main(String[] args) {
-		
 		SimulationParameters params = new SimulationParameters();
 		
-		params.lambda = 0.1;
-		params.blocksNumber = 1;
-		params.mi = 0.1;
-		params.u = 1;
-		params.gama = 0.1;
-		params.p = 0;
-		params.initialPopulationSize = 0;
+		params.lambda = 0;
+		params.blocksNumber = 2;
+		params.mi = 1;
+		params.u = 0.5;
+		params.gama = 1;
+		params.p = 1;
+		params.initialPopulationSize = 50;
 		params.blockRarity = false;
 		params.randomSeed = 0;
 		params.batchSize = 25;
 		params.batches = 10;
-		params.transientSize = 155;
+		params.transientSize = 150;
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
@@ -123,7 +122,6 @@ public class TorrentSimulator {
 		if (Measurement.hasTransientBatch()) {
 			batchData = Measurement.getTransientBatchData();
 			init(events, publisher, peers, currentTime, batchData);
-			
 			logger.info(-1 + " transient started at "+ currentTime +".");
 			for (int transientCounter = 0; transientCounter < transientSize; transientCounter++) {
 				Event currentEvent = events.poll();
@@ -178,8 +176,9 @@ public class TorrentSimulator {
 		if (initialPopulationSize == 0) {
 			events.add(new ArrivalEvent(currentTime + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, batchData));
 		} else {
-			for (int i = 1; i < initialPopulationSize; i++) {
+			for (int i = 1; i <= initialPopulationSize; i++) {
 				peers.add(new Peer());
+				events.add(new PeerUploadEvent(currentTime + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData));
 			}
 		}
 		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData));
