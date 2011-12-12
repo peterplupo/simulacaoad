@@ -43,19 +43,24 @@ public class TorrentSimulator {
 	
 	public static void main(String[] args) {
 		SimulationParameters params = new SimulationParameters();
+		Scenario scenario = new Scenario();
+		scenario.runScenario(params, 60);
 		
-		params.lambda = 0;
-		params.blocksNumber = 2;
-		params.mi = 1;
-		params.u = 0.5;
-		params.gama = 1;
-		params.p = 1;
-		params.initialPopulationSize = 50;
-		params.blockRarity = false;
-		params.randomSeed = 0;
-		params.batchSize = 25;
-		params.batches = 10;
-		params.transientSize = 150;
+//		params.lambda = 0.1;
+//		params.blocksNumber = 1;
+//		params.mi = 0.1;
+//		params.u = 1;
+//		params.gama = 0.1;
+//		params.p = 0;
+//		params.initialPopulationSize = 0;
+//		params.blockRarity = false;
+//		params.randomSeed = 0;
+//		params.batchSize = 25;
+//		params.batches = 10;
+//		params.transientSize = 155;
+
+		
+		
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
@@ -139,6 +144,7 @@ public class TorrentSimulator {
 		}
 		
 		int batchNumber = 0;
+		double sumMeanDownloadTime = 0.0;
 		while(!Measurement.confidenceInterval95()) {
 //			currentTime = 0;
 //			System.out.println(batchNumber);
@@ -165,10 +171,25 @@ public class TorrentSimulator {
 			}
 			batchData.setEndTime(currentTime);
 			logger.info(batchNumber + " batch finished at "+ currentTime +".");
+			
+			sumMeanDownloadTime = sumMeanDownloadTime + batchData.getMeanDownloadTime();
+			
 			batchNumber++;
 		}
 		
+		
 		logger.info("Simulation end.");
+		
+		double totalMeanDownloadTime = sumMeanDownloadTime/(batchNumber-1);
+		double inferiorLimitIC = totalMeanDownloadTime - Measurement.valueConfidenceInterval95();
+		double superiorLimitIC = totalMeanDownloadTime + Measurement.valueConfidenceInterval95();
+		
+		
+		System.out.println("======================================");
+		System.out.println("Tempo Médio de Download da Simulação: " + totalMeanDownloadTime);
+		System.out.println("Intervalo de Confiança: " + Measurement.valueConfidenceInterval95());
+		System.out.println("Limite Inferior Intervalo de Confiança: " + inferiorLimitIC);
+		System.out.println("Limite Superior Intervalo de Confiança: " + superiorLimitIC);
 	}
 
 	private void init(PriorityQueue<Event> events, Publisher publisher,
@@ -184,19 +205,19 @@ public class TorrentSimulator {
 		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData));
 	}
 	
-	public static class SimulationParameters {
-		public double lambda;
-		public int blocksNumber;
-		public double mi;
-		public double u;
-		public double gama;
-		public double p;
-		public double initialPopulationSize;
-		public boolean blockRarity;
-		public long randomSeed;
-		public int batchSize;
-		public int batches;
-		public int transientSize;
-	}
+//	public static class SimulationParameters {
+//		public double lambda;
+//		public int blocksNumber;
+//		public double mi;
+//		public double u;
+//		public double gama;
+//		public double p;
+//		public double initialPopulationSize;
+//		public boolean blockRarity;
+//		public long randomSeed;
+//		public int batchSize;
+//		public int batches;
+//		public int transientSize;
+//	}
 
 }

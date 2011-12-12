@@ -70,4 +70,20 @@ public class Measurement {
 		//2 * 1.96 = 3.92
 		return 3.92 * stat.getVariance()/Math.sqrt(stat.getN())<0.1*stat.getMean();
 	}
+	
+	public static double valueConfidenceInterval95() {
+		double retorno = 0.0;
+		if (simulationData.size()>=3) {
+			DescriptiveStatistics stat = new DescriptiveStatistics();
+			for (BatchData batch : getBatchData(false)) {
+				stat.addValue(batch.getMeanDownloadTime());
+			}
+			//sumPairs(means.toArray(new Double[means.size()]))[0]
+			//2 * 1.96 = 3.92
+			retorno = 3.92 * stat.getVariance()/Math.sqrt(stat.getN());
+		}
+		
+		return retorno;
+		
+	}
 }
