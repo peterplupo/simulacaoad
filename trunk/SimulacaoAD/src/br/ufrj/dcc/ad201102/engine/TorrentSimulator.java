@@ -46,20 +46,19 @@ public class TorrentSimulator {
 		Scenario scenario = new Scenario();
 		scenario.runScenario(params, 60);
 		
-//		params.lambda = 0.1;
-//		params.blocksNumber = 1;
-//		params.mi = 0.1;
-//		params.u = 1;
-//		params.gama = 0.1;
+//		params.lambda = 1;
+//		params.blocksNumber = 10;
+//		params.mi = 1;
+//		params.u = 0.5;
+//		params.gama = 1;
 //		params.p = 0;
 //		params.initialPopulationSize = 0;
 //		params.blockRarity = false;
 //		params.randomSeed = 0;
 //		params.batchSize = 25;
 //		params.batches = 10;
-//		params.transientSize = 155;
+//		params.transientSize = 150;
 
-		
 		
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
@@ -181,15 +180,15 @@ public class TorrentSimulator {
 		logger.info("Simulation end.");
 		
 		double totalMeanDownloadTime = sumMeanDownloadTime/(batchNumber-1);
-		double inferiorLimitIC = totalMeanDownloadTime - Measurement.valueConfidenceInterval95();
-		double superiorLimitIC = totalMeanDownloadTime + Measurement.valueConfidenceInterval95();
+		double inferiorLimitCI = totalMeanDownloadTime - Measurement.valueConfidenceInterval95();
+		double superiorLimitCI = totalMeanDownloadTime + Measurement.valueConfidenceInterval95();
 		
 		
-		System.out.println("======================================");
-		System.out.println("Tempo Médio de Download da Simulação: " + totalMeanDownloadTime);
-		System.out.println("Intervalo de Confiança: " + Measurement.valueConfidenceInterval95());
-		System.out.println("Limite Inferior Intervalo de Confiança: " + inferiorLimitIC);
-		System.out.println("Limite Superior Intervalo de Confiança: " + superiorLimitIC);
+		logger.info("======================================");
+		logger.info("Tempo Médio de Download da Simulação: " + totalMeanDownloadTime);
+		logger.info("Intervalo de Confiança: " + Measurement.valueConfidenceInterval95());
+		logger.info("Limite Inferior Intervalo de Confiança: " + inferiorLimitCI);
+		logger.info("Limite Superior Intervalo de Confiança: " + superiorLimitCI);
 	}
 
 	private void init(PriorityQueue<Event> events, Publisher publisher,
