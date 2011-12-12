@@ -168,4 +168,8 @@ public class BatchData implements Comparable<BatchData> {
 		return timeSumPopulation;
 	}
 	
+	public Map<Double, Double> getDownloadTimesPerInstant() {
+		return downloadTimes;
+	}
+	
 }
