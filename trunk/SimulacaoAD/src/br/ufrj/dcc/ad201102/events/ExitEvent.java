@@ -25,7 +25,7 @@ public class ExitEvent extends Event {
 	void runEvent(Collection<Event> events, BatchData newBatchData) {
 		peers.remove(peer);
 		if (P > EXIT_PROBABILITY.nextRandom()) {
-			events.add(new ArrivalEvent(time + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, newBatchData));
+			events.add(new ArrivalEvent(time, new Peer(), peers, newBatchData));
 		}
 		batchData.addPopulationSize(time, peers.size());
 		batchData.addExit(time);
