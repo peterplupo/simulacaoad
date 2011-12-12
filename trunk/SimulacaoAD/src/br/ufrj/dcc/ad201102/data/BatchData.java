@@ -1,6 +1,9 @@
 package br.ufrj.dcc.ad201102.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -164,12 +167,39 @@ public class BatchData implements Comparable<BatchData> {
 		
 		for (double[] timePopulation : timePopulationSeries) {
 			timeSumPopulation.put(timePopulation[0]-getStartTime(), timePopulation[1]/sumPopulation);
+			
 		}
 		return timeSumPopulation;
+	}
+	
+	public double getMedianDownloadTime(){
+		double median = 0.0;
+		this.getPopulationCDF();
+		int divisao = 0;
+		 ArrayList<Double> times = new ArrayList<Double>();
+		 Collections.sort(times);
+		 Iterator<Double> it = this.getDownloadTimes().iterator();
+		 while(it.hasNext()){
+			 times.add(it.next());
+		 }
+		 
+		
+		if((this.getDownloadTimes().size() %2) == 1) {
+			divisao = this.getDownloadTimes().size()/2;
+			median = times.get(divisao);
+			
+		} else {
+			divisao = this.getDownloadTimes().size()/2;
+			int central = ((divisao-1) + (divisao+1))/2;
+			median = times.get(central);
+		}
+		
+		return median;
 	}
 	
 	public Map<Double, Double> getDownloadTimesPerInstant() {
 		return downloadTimes;
 	}
+
 	
 }
