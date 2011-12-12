@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%p %25m%n" /> <!-- (%F:%L) class:line -->
+		</layout>
+	</appender>
+
+	<appender name="rollingFileAppender" class="org.apache.log4j.RollingFileAppender">
+		<rollingPolicy class="org.apache.log4j.rolling.TimeBasedRollingPolicy">
+			<param name="FileNamePattern" value="messages.%d{yyyy-MM}.log" />
+		</rollingPolicy>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%p %25m%n" /> <!-- (%F:%L) class:line -->
+		</layout>
+	</appender>
+
+	<logger name="br.ufrj.dcc.ad201102">
+        <level value="debug"/>
+    </logger>
+
+	<root>
+		<priority value="off" />
+		<appender-ref ref="console" />
+	</root>
+
+</log4j:configuration>
