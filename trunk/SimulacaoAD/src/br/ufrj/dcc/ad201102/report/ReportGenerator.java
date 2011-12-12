@@ -82,22 +82,11 @@ public class ReportGenerator {
 		
 		for (BatchData batch : batches) {
 			XYSeries series = new XYSeries(batch.getBatchNumber());
-			double sumPopulation = 0;
 			
-			double[][] timePopulationSeries = new double[batch.getPopulationSize().size()][2];
-			
-			int i = 0;
-			for (Map.Entry<Double, Integer> population : batch.getPopulationSize().entrySet()) {
-				sumPopulation = sumPopulation + population.getValue();
-				timePopulationSeries[i][0] = population.getKey();
-				timePopulationSeries[i][1] = sumPopulation;
-				i++;
+			for (Map.Entry<Double, Double> timePopulation : batch.getPopulationCDF().entrySet()) {
+				series.add(timePopulation.getKey(), timePopulation.getValue());
 			}
 			
-			for (double[] timePopulation : timePopulationSeries) {
-				series.add(timePopulation[0]-batch.getStartTime(), timePopulation[1]/sumPopulation);
-			}
-				
 			data.addSeries(series);
 		}
 		
@@ -135,7 +124,9 @@ public class ReportGenerator {
 		XYSeries series = new XYSeries("Output");
 		
 		for (BatchData batch : batches) {
-			output.addValue(batch.getExits());
+			for (Double exitTime : batch.getExits()) {
+//				output.addValue();
+			}
 		}
 		
 		data.addSeries(series);
