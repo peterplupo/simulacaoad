@@ -46,21 +46,6 @@ public class TorrentSimulator {
 		Scenario scenario = new Scenario();
 		scenario.runScenario(params, 60);
 		
-//		params.lambda = 1;
-//		params.blocksNumber = 10;
-//		params.mi = 1;
-//		params.u = 0.5;
-//		params.gama = 1;
-//		params.p = 0;
-//		params.initialPopulationSize = 0;
-//		params.blockRarity = false;
-//		params.randomSeed = 0;
-//		params.batchSize = 25;
-//		params.batches = 10;
-//		params.transientSize = 150;
-
-		
-		
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
 		ReportGenerator.getPopulationPMF(Measurement.getBatchData(false));
@@ -204,19 +189,5 @@ public class TorrentSimulator {
 		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData));
 	}
 	
-//	public static class SimulationParameters {
-//		public double lambda;
-//		public int blocksNumber;
-//		public double mi;
-//		public double u;
-//		public double gama;
-//		public double p;
-//		public double initialPopulationSize;
-//		public boolean blockRarity;
-//		public long randomSeed;
-//		public int batchSize;
-//		public int batches;
-//		public int transientSize;
-//	}
 
 }
