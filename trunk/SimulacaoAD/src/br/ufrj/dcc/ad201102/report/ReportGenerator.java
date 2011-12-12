@@ -46,7 +46,7 @@ public class ReportGenerator {
 		}
 		
 		for (Map.Entry<Integer, Double> prob : popProbDistRun.entrySet()) {
-			series.add((Number)(prob.getKey()/(endTime-startTime)), prob.getValue());
+			series.add((Number)(prob.getValue()/(endTime-startTime)), prob.getKey());
 		}
 		
 		data.addSeries(series);
