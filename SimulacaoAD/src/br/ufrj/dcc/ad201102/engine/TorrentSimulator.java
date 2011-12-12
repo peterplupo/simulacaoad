@@ -2,6 +2,7 @@ package br.ufrj.dcc.ad201102.engine;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.PriorityQueue;
 
 import org.apache.log4j.Logger;
@@ -44,7 +45,7 @@ public class TorrentSimulator {
 	public static void main(String[] args) {
 		SimulationParameters params = new SimulationParameters();
 		Scenario scenario = new Scenario();
-		scenario.runScenario(params, 60);
+		scenario.runScenario(params, 11);
 		
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
@@ -129,6 +130,7 @@ public class TorrentSimulator {
 		
 		int batchNumber = 0;
 		double sumMeanDownloadTime = 0.0;
+		ArrayList<Double> medianDownloadTimes = new ArrayList<Double>();
 		while(!Measurement.confidenceInterval95()) {
 //			currentTime = 0;
 //			System.out.println(batchNumber);
@@ -156,6 +158,7 @@ public class TorrentSimulator {
 			batchData.setEndTime(currentTime);
 			logger.info(batchNumber + " batch finished at "+ currentTime +".");
 			
+			medianDownloadTimes.add(batchData.getMedianDownloadTime());
 			sumMeanDownloadTime = sumMeanDownloadTime + batchData.getMeanDownloadTime();
 			
 			batchNumber++;
@@ -168,12 +171,38 @@ public class TorrentSimulator {
 		double inferiorLimitCI = totalMeanDownloadTime - Measurement.valueConfidenceInterval95();
 		double superiorLimitCI = totalMeanDownloadTime + Measurement.valueConfidenceInterval95();
 		
+		double median = getMedianDownloadTimes(medianDownloadTimes);
+		double inferiorLimitCI2 = median - Measurement.valueConfidenceInterval95();
+		double superiorLimitCI2 = median + Measurement.valueConfidenceInterval95();
+		
 		
 		logger.info("======================================");
 		logger.info("Tempo Médio de Download da Simulação: " + totalMeanDownloadTime);
 		logger.info("Intervalo de Confiança: " + Measurement.valueConfidenceInterval95());
 		logger.info("Limite Inferior Intervalo de Confiança: " + inferiorLimitCI);
 		logger.info("Limite Superior Intervalo de Confiança: " + superiorLimitCI);
+		
+		logger.info("======================================");
+		logger.info("Mediana do Tempo Download da Simulação: " + median);
+		logger.info("Limite Inferior Intervalo de Confiança: " + inferiorLimitCI2);
+		logger.info("Limite Superior Intervalo de Confiança: " + superiorLimitCI2);
+	}
+
+	private double getMedianDownloadTimes(ArrayList<Double> medianDownloadTimes) {
+		double median = 0.0;
+		int divisao = 0;
+		Collections.sort(medianDownloadTimes);
+		if((medianDownloadTimes.size() %2) == 1) {
+			divisao = medianDownloadTimes.size()/2;
+			median = medianDownloadTimes.get(divisao);
+			
+		} else {
+			divisao = medianDownloadTimes.size()/2;
+			median = ((divisao-1) + (divisao+1))/2;
+			median = medianDownloadTimes.get(divisao);
+		}
+		
+		return median;
 	}
 
 	private void init(PriorityQueue<Event> events, Publisher publisher,
