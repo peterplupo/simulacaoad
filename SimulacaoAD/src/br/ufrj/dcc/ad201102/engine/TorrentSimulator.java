@@ -47,94 +47,94 @@ public class TorrentSimulator {
 		SimulationParameters params = new Scenario().getScenario(11);
 		TorrentSimulator simulator = new TorrentSimulator(params);
 		simulator.simulate();
-		ReportGenerator.getPopulationPMF("reports\\reports\\11\\", Measurement.getBatchData(false));
+		ReportGenerator.getPopulationPMF("reports\\11\\", Measurement.getBatchData(false));
 		ReportGenerator.getPopulationCDF("reports\\11\\", Measurement.getBatchData(false));
 		ReportGenerator.getOutput("reports\\11\\", Measurement.getBatchData(false));
 		ReportGenerator.getMeanDownloadTime("reports\\11\\", Measurement.getBatchData(false));
 		
-		params = new Scenario().getScenario(12);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		ReportGenerator.getPopulationPMF("reports\\12\\", Measurement.getBatchData(false));
-		ReportGenerator.getPopulationCDF("reports\\12\\", Measurement.getBatchData(false));
-		ReportGenerator.getOutput("reports\\12\\", Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime("reports\\12\\", Measurement.getBatchData(false));
-		
-		params = new Scenario().getScenario(13);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		ReportGenerator.getPopulationPMF("reports\\13\\", Measurement.getBatchData(false));
-		ReportGenerator.getPopulationCDF("reports\\13\\", Measurement.getBatchData(false));
-		ReportGenerator.getOutput("reports\\13\\", Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime("reports\\13\\", Measurement.getBatchData(false));
-		
-		params = new Scenario().getScenario(21);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		ReportGenerator.getPopulationPMF("reports\\21\\", Measurement.getBatchData(false));
-		ReportGenerator.getPopulationCDF("reports\\21\\", Measurement.getBatchData(false));
-		ReportGenerator.getOutput("reports\\21\\", Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime("reports\\21\\", Measurement.getBatchData(false));
-		
-		params = new Scenario().getScenario(22);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		ReportGenerator.getPopulationPMF("reports\\22\\", Measurement.getBatchData(false));
-		ReportGenerator.getPopulationCDF("reports\\22\\", Measurement.getBatchData(false));
-		ReportGenerator.getOutput("reports\\22\\", Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime("reports\\22\\", Measurement.getBatchData(false));
-		
-		params = new Scenario().getScenario(23);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		ReportGenerator.getPopulationPMF("reports\\23\\", Measurement.getBatchData(false));
-		ReportGenerator.getPopulationCDF("reports\\23\\", Measurement.getBatchData(false));
-		ReportGenerator.getOutput("reports\\23\\", Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime("reports\\23\\", Measurement.getBatchData(false));
-		
-		int scen = 30;
-		params = new Scenario().getScenario(scen);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		for (int i = 1; i <= 50; i++) {
-			params.setInitialPopulationSize(i);
-			ReportGenerator.getPopulationCDF("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-			ReportGenerator.getOutput("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-			ReportGenerator.getMeanDownloadTime("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-		}
-		
-		scen = 40;
-		params = new Scenario().getScenario(scen);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		for (int i = 1; i <= 50; i++) {
-			params.setInitialPopulationSize(i);
-			ReportGenerator.getPopulationCDF("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-			ReportGenerator.getOutput("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-			ReportGenerator.getMeanDownloadTime("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-		}
-		
-		scen = 50;
-		params = new Scenario().getScenario(scen);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		for (int i = 1; i <= 50; i++) {
-			params.setInitialPopulationSize(i);
-			ReportGenerator.getPopulationCDF("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-			ReportGenerator.getOutput("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-			ReportGenerator.getMeanDownloadTime("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-		}
-		
-		scen = 60;
-		params = new Scenario().getScenario(scen);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		for (int i = 1; i <= 50; i++) {
-			params.setInitialPopulationSize(i);
-			ReportGenerator.getPopulationCDF("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-			ReportGenerator.getOutput("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-			ReportGenerator.getMeanDownloadTime("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
-		}
+//		params = new Scenario().getScenario(12);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		ReportGenerator.getPopulationPMF("reports\\12\\", Measurement.getBatchData(false));
+//		ReportGenerator.getPopulationCDF("reports\\12\\", Measurement.getBatchData(false));
+//		ReportGenerator.getOutput("reports\\12\\", Measurement.getBatchData(false));
+//		ReportGenerator.getMeanDownloadTime("reports\\12\\", Measurement.getBatchData(false));
+//		
+//		params = new Scenario().getScenario(13);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		ReportGenerator.getPopulationPMF("reports\\13\\", Measurement.getBatchData(false));
+//		ReportGenerator.getPopulationCDF("reports\\13\\", Measurement.getBatchData(false));
+//		ReportGenerator.getOutput("reports\\13\\", Measurement.getBatchData(false));
+//		ReportGenerator.getMeanDownloadTime("reports\\13\\", Measurement.getBatchData(false));
+//		
+//		params = new Scenario().getScenario(21);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		ReportGenerator.getPopulationPMF("reports\\21\\", Measurement.getBatchData(false));
+//		ReportGenerator.getPopulationCDF("reports\\21\\", Measurement.getBatchData(false));
+//		ReportGenerator.getOutput("reports\\21\\", Measurement.getBatchData(false));
+//		ReportGenerator.getMeanDownloadTime("reports\\21\\", Measurement.getBatchData(false));
+//		
+//		params = new Scenario().getScenario(22);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		ReportGenerator.getPopulationPMF("reports\\22\\", Measurement.getBatchData(false));
+//		ReportGenerator.getPopulationCDF("reports\\22\\", Measurement.getBatchData(false));
+//		ReportGenerator.getOutput("reports\\22\\", Measurement.getBatchData(false));
+//		ReportGenerator.getMeanDownloadTime("reports\\22\\", Measurement.getBatchData(false));
+//		
+//		params = new Scenario().getScenario(23);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		ReportGenerator.getPopulationPMF("reports\\23\\", Measurement.getBatchData(false));
+//		ReportGenerator.getPopulationCDF("reports\\23\\", Measurement.getBatchData(false));
+//		ReportGenerator.getOutput("reports\\23\\", Measurement.getBatchData(false));
+//		ReportGenerator.getMeanDownloadTime("reports\\23\\", Measurement.getBatchData(false));
+//		
+//		int scen = 30;
+//		params = new Scenario().getScenario(scen);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		for (int i = 1; i <= 50; i++) {
+//			params.setInitialPopulationSize(i);
+//			ReportGenerator.getPopulationCDF("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//			ReportGenerator.getOutput("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//			ReportGenerator.getMeanDownloadTime("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//		}
+//		
+//		scen = 40;
+//		params = new Scenario().getScenario(scen);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		for (int i = 1; i <= 50; i++) {
+//			params.setInitialPopulationSize(i);
+//			ReportGenerator.getPopulationCDF("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//			ReportGenerator.getOutput("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//			ReportGenerator.getMeanDownloadTime("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//		}
+//		
+//		scen = 50;
+//		params = new Scenario().getScenario(scen);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		for (int i = 1; i <= 50; i++) {
+//			params.setInitialPopulationSize(i);
+//			ReportGenerator.getPopulationCDF("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//			ReportGenerator.getOutput("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//			ReportGenerator.getMeanDownloadTime("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//		}
+//		
+//		scen = 60;
+//		params = new Scenario().getScenario(scen);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		for (int i = 1; i <= 50; i++) {
+//			params.setInitialPopulationSize(i);
+//			ReportGenerator.getPopulationCDF("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//			ReportGenerator.getOutput("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//			ReportGenerator.getMeanDownloadTime("reports\\" + scen + "\\"+i+"\\", Measurement.getBatchData(false));
+//		}
 				
 		
 //		params.lambda = 1;
