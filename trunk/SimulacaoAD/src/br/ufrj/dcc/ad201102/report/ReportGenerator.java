@@ -24,15 +24,7 @@ public class ReportGenerator {
 		XYSeries series = new XYSeries("Media da população");
 		
 		Map<Integer, Double> popProbDistRun = new TreeMap<Integer, Double>();
-		double startTime = 0;
-		double endTime = 0;
-		boolean firstBatch = true;
 		for (BatchData batch : batches) {
-			if (firstBatch) {
-				startTime = batch.getStartTime();
-				firstBatch = false;
-			}
-			endTime = batch.getEndTime();
 //			series.add(batch.getBatchNumber(), batch.getMeanPopulation());
 			Map<Integer, Double> popProbDistBatch = batch.getPopulationProbabilityDistribution();
 			for (Map.Entry<Integer, Double> prob : popProbDistBatch.entrySet()) {
@@ -46,15 +38,15 @@ public class ReportGenerator {
 		}
 		
 		for (Map.Entry<Integer, Double> prob : popProbDistRun.entrySet()) {
-			series.add((Number)(prob.getValue()/(endTime-startTime)), prob.getKey());
+			series.add((Number)prob.getKey(), prob.getValue()/batches.size());
 		}
 		
 		data.addSeries(series);
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
             "PMF população",
-            "Tempo", 
             "Tamanho da população", 
+            "Tempo", 
             data,
             PlotOrientation.VERTICAL,
             true,
