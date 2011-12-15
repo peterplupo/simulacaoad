@@ -11,7 +11,8 @@ public class Scenario {
 	
 	public Scenario(){}
 	
-	public void runScenario(SimulationParameters params, int scenario){
+	public SimulationParameters getScenario(int scenario){
+		SimulationParameters params = new SimulationParameters();
 		switch (scenario) {
 			case 11: 
 				params.setLambda(0.1);
@@ -104,7 +105,7 @@ public class Scenario {
 				params.setU(1);
 				params.setGama(Double.POSITIVE_INFINITY);
 				params.setP(1);
-				params.setInitialPopulationSize(50);
+				params.setInitialPopulationSize(1);
 				params.setBlockRarity(false);
 				params.setRandomSeed(0);
 				params.setBatchSize(BATCH_SIZE);
@@ -118,7 +119,7 @@ public class Scenario {
 				params.setU(1.0);
 				params.setGama(1.0);
 				params.setP(1);
-				params.setInitialPopulationSize(50);
+				params.setInitialPopulationSize(1);
 				params.setBlockRarity(false);
 				params.setRandomSeed(0);
 				params.setBatchSize(BATCH_SIZE);
@@ -132,7 +133,7 @@ public class Scenario {
 				params.setU(1);
 				params.setGama(Double.POSITIVE_INFINITY);
 				params.setP(1);
-				params.setInitialPopulationSize(50);
+				params.setInitialPopulationSize(1);
 				params.setBlockRarity(false);
 				params.setRandomSeed(0);
 				params.setBatchSize(BATCH_SIZE);
@@ -146,7 +147,7 @@ public class Scenario {
 				params.setU(0.5);
 				params.setGama(1);
 				params.setP(1);
-				params.setInitialPopulationSize(50);
+				params.setInitialPopulationSize(1);
 				params.setBlockRarity(false);
 				params.setRandomSeed(0);
 				params.setBatchSize(BATCH_SIZE);
@@ -154,8 +155,9 @@ public class Scenario {
 				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			default:
-				logger.info("Scenario is not valid.");
+				logger.error("Scenario is not valid.");
 				break;
 		}
+		return params;
 	}
 }

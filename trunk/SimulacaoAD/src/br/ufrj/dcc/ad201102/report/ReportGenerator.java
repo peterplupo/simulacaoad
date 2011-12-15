@@ -18,7 +18,7 @@ import br.ufrj.dcc.ad201102.data.BatchData;
 
 public class ReportGenerator {
 	
-	public static void getPopulationPMF(Collection<BatchData> batches) {
+	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches) {
 		XYSeriesCollection data = new XYSeriesCollection();
 
 		XYSeries series = new XYSeries("Media da população");
@@ -63,7 +63,7 @@ public class ReportGenerator {
         );
         
         try {
-			ChartUtilities.saveChartAsPNG(new File("mediaPopPMF.png"), chart, 600, 400);
+			ChartUtilities.saveChartAsPNG(new File(filePrefix + "mediaPopPMF.png"), chart, 600, 400);
 		} catch (IOException e) {
 		}
         
@@ -76,7 +76,7 @@ public class ReportGenerator {
 //        frame.setVisible(true);
 	}
 	
-	public static void getPopulationCDF(Collection<BatchData> batches) {
+	public static void getPopulationCDF(String filePrefix, Collection<BatchData> batches) {
 		XYSeriesCollection data = new XYSeriesCollection();
 
 		
@@ -104,7 +104,7 @@ public class ReportGenerator {
         );
         
         try {
-			ChartUtilities.saveChartAsPNG(new File("mediaPopCDF.png"), chart, 600, 400);
+			ChartUtilities.saveChartAsPNG(new File(filePrefix + "mediaPopCDF.png"), chart, 600, 400);
 		} catch (IOException e) {
 		}
         
@@ -117,7 +117,7 @@ public class ReportGenerator {
 //        frame.setVisible(true);
 	}
 	
-	public static void getOutput(Collection<BatchData> batches) {
+	public static void getOutput(String filePrefix, Collection<BatchData> batches) {
 		XYSeriesCollection data = new XYSeriesCollection();
 
 		DescriptiveStatistics output = new DescriptiveStatistics();
@@ -143,7 +143,7 @@ public class ReportGenerator {
         );
         
         try {
-			ChartUtilities.saveChartAsPNG(new File("mediaPopCDF.png"), chart, 600, 400);
+			ChartUtilities.saveChartAsPNG(new File(filePrefix + "mediaPopCDF.png"), chart, 600, 400);
 		} catch (IOException e) {
 		}
         
@@ -154,6 +154,10 @@ public class ReportGenerator {
 //        frame.getContentPane().add(chartPanel);
 //        frame.pack();
 //        frame.setVisible(true);
+	}
+	
+	public static void getMeanDownloadTime(String filePrefix, Collection<BatchData> batches) {
+		
 	}
 
 }
