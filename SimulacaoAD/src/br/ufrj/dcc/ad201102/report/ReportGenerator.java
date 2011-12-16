@@ -200,7 +200,7 @@ public class ReportGenerator {
 			statsMeanPopulation.addValue(batch.getMeanPopulation());
 		}
 		System.out.println();
-		System.out.println("=============================== Estatísticas");
+		System.out.println("=============================== Statistics");
 		System.out.println("Download Time - Mean " + stats.getMean());
 		System.out.println("Download Time - Lower CI " + (stats.getMean() - Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
 		System.out.println("Download Time - Higher CI " + (stats.getMean() + Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
