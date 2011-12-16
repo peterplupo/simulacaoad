@@ -14,11 +14,16 @@ public class BatchData implements Comparable<BatchData> {
 	
 	private double startTime;
 	private double endTime;
-	private int initialPopulation;
+	private int initialBatchPopulation;
 	private String id;
 	private Map<Double, Double> downloadTimes = new TreeMap<Double, Double>();
 	private DescriptiveStatistics downloadTimesStatistics = new DescriptiveStatistics();
 	private Map<Double, Integer> populationSize = new TreeMap<Double, Integer>();
+	private double totalPopulation;
+	public double getTotalPopulation() {
+		return totalPopulation;
+	}
+
 	private Collection<Double> exits = new TreeSet<Double>();
 	private DescriptiveStatistics exitsStatistics = new DescriptiveStatistics();
 	private int batchNumber;
@@ -54,6 +59,7 @@ public class BatchData implements Comparable<BatchData> {
 			return;
 		}
 		populationSize.put(time, size);
+		totalPopulation = totalPopulation + size;
 	}
 
 	public void addExit(double time) {
@@ -66,10 +72,10 @@ public class BatchData implements Comparable<BatchData> {
 	
 	public double getMeanPopulation() {
 		double lastTime = getStartTime();
-		double lastPop = getInitialPopulation();
+		double lastPop = getInitialBatchPopulation();
 		
 		if (getPopulationSize().size() == 0) {
-			return getInitialPopulation();
+			return getInitialBatchPopulation();
 		} else {
 			DescriptiveStatistics stat = new DescriptiveStatistics();
 			for (Map.Entry<Double, Integer> size : getPopulationSize().entrySet()) {
@@ -85,11 +91,11 @@ public class BatchData implements Comparable<BatchData> {
 	public Map<Integer, Double> getPopulationProbabilityDistribution() {
 		double batchTime = endTime - startTime;
 		double lastTime = getStartTime();
-		int lastPop = getInitialPopulation();
+		int lastPop = getInitialBatchPopulation();
 		Map<Integer, Double> popProbDist = new TreeMap<Integer, Double>();
 		
 		if (getPopulationSize().size() == 0) {
-			popProbDist.put(getInitialPopulation(), getEndTime() - getStartTime());
+			popProbDist.put(getInitialBatchPopulation(), getEndTime() - getStartTime());
 		} else {
 			for (Map.Entry<Double, Integer> size : getPopulationSize().entrySet()) {
 				if (popProbDist.get(lastPop) == null) {
@@ -128,12 +134,12 @@ public class BatchData implements Comparable<BatchData> {
 		return populationSize;
 	}
 
-	public int getInitialPopulation() {
-		return initialPopulation;
+	public int getInitialBatchPopulation() {
+		return initialBatchPopulation;
 	}
 
-	public void setInitialPopulation(int initialPopulation) {
-		this.initialPopulation = initialPopulation;
+	public void setInitialBatchPopulation(int initialPopulation) {
+		this.initialBatchPopulation = initialPopulation;
 	}
 
 	@Override
@@ -144,7 +150,7 @@ public class BatchData implements Comparable<BatchData> {
 	public double getMeanDownloadTime() {
 		return downloadTimesStatistics.getMean();
 	}
-
+	
 	public Collection<Double> getDownloadTimes() {
 		return downloadTimes.values();
 	}

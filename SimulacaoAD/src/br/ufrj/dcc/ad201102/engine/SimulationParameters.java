@@ -7,7 +7,7 @@ public class SimulationParameters {
 	public double u;
 	public double gama;
 	public double p;
-	public double initialPopulationSize;
+	public int initialPopulationSize;
 	public boolean blockRarity;
 	public long randomSeed;
 	public int batchSize;
@@ -51,10 +51,10 @@ public class SimulationParameters {
 	public void setP(double p) {
 		this.p = p;
 	}
-	public double getInitialPopulationSize() {
+	public int getInitialPopulationSize() {
 		return initialPopulationSize;
 	}
-	public void setInitialPopulationSize(double initialPopulationSize) {
+	public void setInitialPopulationSize(int initialPopulationSize) {
 		this.initialPopulationSize = initialPopulationSize;
 	}
 	public boolean isBlockRarity() {

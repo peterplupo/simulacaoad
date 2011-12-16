@@ -68,15 +68,27 @@ public class ReportGenerator {
 //        frame.setVisible(true);
 	}
 	
-	public static void getPopulationCDF(String filePrefix, Collection<BatchData> batches) {
+	public static void getDownloadTimeCDF(String filePrefix, Collection<BatchData> batches) {
 		XYSeriesCollection data = new XYSeriesCollection();
 
-		
 		for (BatchData batch : batches) {
 			XYSeries series = new XYSeries(batch.getBatchNumber());
 			
-			for (Map.Entry<Double, Double> timePopulation : batch.getPopulationCDF().entrySet()) {
-				series.add(timePopulation.getKey(), timePopulation.getValue());
+			TreeMap<Double, Integer> timesFrequency = new TreeMap<Double, Integer>();
+			
+			for (Double downloadTime : batch.getDownloadTimes()) {
+				Integer times = timesFrequency.get(downloadTime);
+				if (times == null) {
+					timesFrequency.put(downloadTime, 1);
+				} else {
+					timesFrequency.put(downloadTime, timesFrequency.get(downloadTime) + 1);
+				}
+			}
+			
+			double acc = 0;
+			for (Map.Entry<Double, Integer> timeFrequency : timesFrequency.entrySet()) {
+				acc = acc + ((double)timeFrequency.getValue())/batch.getDownloadTimes().size();
+				series.add((Number)timeFrequency.getKey(), acc);
 			}
 			
 			data.addSeries(series);
@@ -85,18 +97,18 @@ public class ReportGenerator {
 		
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
-            "CDF População",
-            "Tempo", 
-            "População acumulada", 
+            "CDF Tempo de Download",
+            "Tempo de download", 
+            "Tempo acumulado normalizado", 
             data,
             PlotOrientation.VERTICAL,
             false,
             false,
             false
         );
-        
+
         try {
-			ChartUtilities.saveChartAsPNG(new File(filePrefix + "mediaPopCDF.png"), chart, 600, 400);
+			ChartUtilities.saveChartAsPNG(new File(filePrefix + "downloadTimeCDF.png"), chart, 600, 400);
 		} catch (IOException e) {
 		}
         
