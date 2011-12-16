@@ -43,12 +43,15 @@ public class TorrentSimulator {
 	
 	public static void main(String[] args) {
 		
-		SimulationParameters params = new Scenario().getScenario(11);
-//		params.setTransientSize(100);
-//		params.setBlocksNumber(100);
-		TorrentSimulator simulator = new TorrentSimulator(params);
+		SimulationParameters params;
+		TorrentSimulator simulator;
+		
+		params = new Scenario().getScenario(11);
+		params.setTransientSize(100);
+		params.setBlocksNumber(10);
+		simulator = new TorrentSimulator(params);
 		simulator.simulate();
-//		ReportGenerator.getPopulationSize("reports11", Measurement.getBatchData(true));
+		ReportGenerator.getPopulationSize("reports11", Measurement.getBatchData(true));
 		ReportGenerator.getPopulationPMF("reports11", Measurement.getBatchData(false));
 		ReportGenerator.getDownloadTimeCDF("reports11", Measurement.getBatchData(false));
 		ReportGenerator.getMeanDownloadTime("reports11", Measurement.getBatchData(false));

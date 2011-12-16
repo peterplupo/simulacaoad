@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.commons.math.distribution.DiscreteDistribution;
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -27,20 +28,26 @@ public class ReportGenerator {
 	public static void getPopulationSize(String filePrefix, Collection<BatchData> batches) {
 		XYSeriesCollection data = new XYSeriesCollection();
 
-		XYSeries series = new XYSeries("Media da população");
+		XYSeries series = new XYSeries("Tamanho da população");
+		XYSeries series2 = new XYSeries("Vazão média");
+		XYSeries series3 = new XYSeries("Tempo médio de download");
 		
 		for (BatchData batch : batches) {
-			for (Map.Entry<Double, Integer> popTime : batch.getPopulationSize().entrySet()) {
-				series.add((Number)popTime.getKey(), popTime.getValue());
-			}
+			series2.add(batch.getStartTime(), batch.getOutput());
+			series3.add(batch.getStartTime(), batch.getMeanDownloadTime()/100);
+//			for (Map.Entry<Double, Integer> popTime : batch.getPopulationSize().entrySet()) {
+//				series.add((Number)popTime.getKey(), popTime.getValue());
+//			}
 		}
 		
 		data.addSeries(series);
+		data.addSeries(series2);
+		data.addSeries(series3);
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
             "PMF população",
-            "Tamanho da população", 
             "Tempo", 
+            "Tamanhos", 
             data,
             PlotOrientation.VERTICAL,
             true,
@@ -49,7 +56,7 @@ public class ReportGenerator {
         );
         
         try {
-			ChartUtilities.saveChartAsPNG(new File(filePrefix + "popTempo.png"), chart, 600, 400);
+			ChartUtilities.saveChartAsPNG(new File(filePrefix + "popVazaoDownloadTempo.png"), chart, 600, 400);
 		} catch (IOException e) {
 		}
         
@@ -166,7 +173,7 @@ public class ReportGenerator {
 				}
 				output.addValue(batch.getOutput());
 			}
-			xyintervalseries.add(runsCounter, runsCounter, runsCounter, output.getMean(), output.getMean() - Measurement.getConfidenceInterval95(output.getMean(), output.getN()), output.getMean() + Measurement.getConfidenceInterval95(output.getMean(), output.getN()));
+			xyintervalseries.add(runsCounter, runsCounter, runsCounter, output.getMean(), output.getMean() - Measurement.getConfidenceInterval95(output.getVariance(), output.getN()), output.getMean() + Measurement.getConfidenceInterval95(output.getVariance(), output.getN()));
 		}
 		
 		XYIntervalSeriesCollection xyintervalseriescollection = new XYIntervalSeriesCollection();
@@ -187,7 +194,13 @@ public class ReportGenerator {
 	}
 	
 	public static void getMeanDownloadTime(String filePrefix, Collection<BatchData> batches) {
-		
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		for (BatchData batch : batches) {
+			stats.addValue(batch.getMeanDownloadTime());
+		}
+		System.out.println("Mean " + stats.getMean());
+		System.out.println("Lower CI " + (stats.getMean() - Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
+		System.out.println("Higher CI " + (stats.getMean() + Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
 	}
 
 }
