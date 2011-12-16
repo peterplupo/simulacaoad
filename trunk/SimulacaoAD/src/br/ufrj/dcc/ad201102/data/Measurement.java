@@ -15,11 +15,16 @@ public class Measurement {
 	private static Map<Integer, Map<Integer, BatchData>> multipleSimulations = new TreeMap<Integer, Map<Integer, BatchData>>();
 	
 	public static void reset() {
-		simulationData.clear();
+		simulationData = new TreeMap<Integer, BatchData>();
 	}
 	
 	public static void newRun(Integer tag) {
 		multipleSimulations.put(tag, simulationData);
+		reset();
+	}
+	
+	public static  Map<Integer, Map<Integer, BatchData>> getRuns() {
+		return multipleSimulations;
 	}
 
 	public static boolean hasTransientBatch() {
@@ -53,8 +58,10 @@ public class Measurement {
 			if (!fetchTransient && hasTransientBatch()) {
 				Collection<BatchData> batches = new TreeSet<BatchData>(simulationData.values());
 				Iterator<BatchData> removeFirst = batches.iterator();
-				removeFirst.next();
-				removeFirst.remove();
+				BatchData batch = removeFirst.next();
+				if (batch.getBatchNumber() == -1) {
+					removeFirst.remove();
+				}
 				return batches;
 			} else {
 				return simulationData.values();
@@ -81,7 +88,10 @@ public class Measurement {
 		}
 		//sumPairs(means.toArray(new Double[means.size()]))[0]
 		//2 * 1.96 = 3.92
-		return 3.92 * Math.sqrt(stat.getVariance())/Math.sqrt(stat.getN());
-		
+		return getConfidenceInterval95(stat.getVariance(), stat.getN());
+	}
+	
+	public static double getConfidenceInterval95(double var, long n) {
+		return 3.92 * Math.sqrt(var)/Math.sqrt(n);
 	}
 }
