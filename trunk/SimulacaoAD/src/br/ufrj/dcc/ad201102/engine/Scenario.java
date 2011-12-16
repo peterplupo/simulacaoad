@@ -5,8 +5,8 @@ import org.apache.log4j.Logger;
 public class Scenario {
 	private static Logger logger = Logger.getLogger(Scenario.class);
 	private static final int QTD_BATCHES = 10;
-	private static final int BATCH_SIZE = 25;
-	private static final int TRANSIENT_SIZE = 155;
+	private static final int BATCH_SIZE = 40;
+	private static final int TRANSIENT_SIZE = 90;
 
 	
 	public Scenario(){}
