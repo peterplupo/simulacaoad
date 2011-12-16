@@ -110,7 +110,7 @@ public class Scenario {
 				params.setRandomSeed(0);
 				params.setBatchSize(BATCH_SIZE);
 				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
+				params.setTransientSize(TRANSIENT_SIZE*300);
 				break;
 			case 40:
 				params.setLambda(0.0);

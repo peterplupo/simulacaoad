@@ -20,13 +20,17 @@ public class BatchData implements Comparable<BatchData> {
 	private DescriptiveStatistics downloadTimesStatistics = new DescriptiveStatistics();
 	private Map<Double, Integer> populationSize = new TreeMap<Double, Integer>();
 	private double totalPopulation;
-	public double getTotalPopulation() {
-		return totalPopulation;
-	}
-
 	private Collection<Double> exits = new TreeSet<Double>();
 	private DescriptiveStatistics exitsStatistics = new DescriptiveStatistics();
 	private int batchNumber;
+	
+	public double getOutput() {
+		return exits.size()/(endTime-startTime);
+	}
+	
+	public double getTotalPopulation() {
+		return totalPopulation;
+	}
 
 	public BatchData(int batchNumber) {
 		this.setBatchNumber(batchNumber);

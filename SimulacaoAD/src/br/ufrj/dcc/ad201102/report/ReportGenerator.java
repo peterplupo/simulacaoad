@@ -10,13 +10,50 @@ import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYErrorRenderer;
+import org.jfree.data.xy.XYIntervalSeries;
+import org.jfree.data.xy.XYIntervalSeriesCollection;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import br.ufrj.dcc.ad201102.data.BatchData;
+import br.ufrj.dcc.ad201102.data.Measurement;
 
 public class ReportGenerator {
+	
+	public static void getPopulationSize(String filePrefix, Collection<BatchData> batches) {
+		XYSeriesCollection data = new XYSeriesCollection();
+
+		XYSeries series = new XYSeries("Media da população");
+		
+		for (BatchData batch : batches) {
+			for (Map.Entry<Double, Integer> popTime : batch.getPopulationSize().entrySet()) {
+				series.add((Number)popTime.getKey(), popTime.getValue());
+			}
+		}
+		
+		data.addSeries(series);
+		
+        JFreeChart chart = ChartFactory.createXYLineChart(
+            "PMF população",
+            "Tamanho da população", 
+            "Tempo", 
+            data,
+            PlotOrientation.VERTICAL,
+            true,
+            true,
+            false
+        );
+        
+        try {
+			ChartUtilities.saveChartAsPNG(new File(filePrefix + "popTempo.png"), chart, 600, 400);
+		} catch (IOException e) {
+		}
+        
+	}
 	
 	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches) {
 		XYSeriesCollection data = new XYSeriesCollection();
@@ -112,52 +149,41 @@ public class ReportGenerator {
 		} catch (IOException e) {
 		}
         
-//        ChartPanel chartPanel = new ChartPanel(chart);
-//        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-//        JFrame frame = new JFrame();
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.getContentPane().add(chartPanel);
-//        frame.pack();
-//        frame.setVisible(true);
 	}
 	
-	public static void getOutput(String filePrefix, Collection<BatchData> batches) {
-		XYSeriesCollection data = new XYSeriesCollection();
+	public static void getOutput(String filePrefix, boolean fetchTransient) {
 
-		DescriptiveStatistics output = new DescriptiveStatistics();
-		XYSeries series = new XYSeries("Output");
+		XYIntervalSeries xyintervalseries = new XYIntervalSeries("");
 		
-		for (BatchData batch : batches) {
-			for (Double exitTime : batch.getExits()) {
-//				output.addValue();
+		int runsCounter = 0;
+		for (Map<Integer, BatchData> simulationData : Measurement.getRuns().values()) {
+			runsCounter++;
+			
+			DescriptiveStatistics output = new DescriptiveStatistics();
+			for(BatchData batch : simulationData.values()) {
+				if (batch.getBatchNumber() == -1 && !fetchTransient) {
+					continue;
+				}
+				output.addValue(batch.getOutput());
 			}
+			xyintervalseries.add(runsCounter, runsCounter, runsCounter, output.getMean(), output.getMean() - Measurement.getConfidenceInterval95(output.getMean(), output.getN()), output.getMean() + Measurement.getConfidenceInterval95(output.getMean(), output.getN()));
 		}
 		
-		data.addSeries(series);
+		XYIntervalSeriesCollection xyintervalseriescollection = new XYIntervalSeriesCollection();
+		xyintervalseriescollection.addSeries(xyintervalseries);
+		NumberAxis numberaxis = new NumberAxis("Rodada");
+		NumberAxis numberaxis1 = new NumberAxis("Média da vazão (com IC)");
+		XYErrorRenderer xyerrorrenderer = new XYErrorRenderer();
+		XYPlot xyplot = new XYPlot(xyintervalseriescollection, numberaxis, numberaxis1, xyerrorrenderer);
 		
-        JFreeChart chart = ChartFactory.createXYLineChart(
-            "Média",
-            "Rodadas", 
-            "Média da população", 
-            data,
-            PlotOrientation.VERTICAL,
-            false,
-            false,
-            false
-        );
-        
+		
+		JFreeChart chart = new JFreeChart("Vazão média", xyplot);
+		
         try {
-			ChartUtilities.saveChartAsPNG(new File(filePrefix + "mediaPopCDF.png"), chart, 600, 400);
+			ChartUtilities.saveChartAsPNG(new File(filePrefix + "vazaoMedia.png"), chart, 600, 400);
 		} catch (IOException e) {
 		}
         
-//        ChartPanel chartPanel = new ChartPanel(chart);
-//        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-//        JFrame frame = new JFrame();
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.getContentPane().add(chartPanel);
-//        frame.pack();
-//        frame.setVisible(true);
 	}
 	
 	public static void getMeanDownloadTime(String filePrefix, Collection<BatchData> batches) {
