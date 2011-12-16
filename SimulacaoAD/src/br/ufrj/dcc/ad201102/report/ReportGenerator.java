@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.commons.math.distribution.DiscreteDistribution;
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -195,12 +194,18 @@ public class ReportGenerator {
 	
 	public static void getMeanDownloadTime(String filePrefix, Collection<BatchData> batches) {
 		DescriptiveStatistics stats = new DescriptiveStatistics();
+		DescriptiveStatistics statsMeanPopulation = new DescriptiveStatistics();
 		for (BatchData batch : batches) {
 			stats.addValue(batch.getMeanDownloadTime());
+			statsMeanPopulation.addValue(batch.getMeanPopulation());
 		}
-		System.out.println("Mean " + stats.getMean());
-		System.out.println("Lower CI " + (stats.getMean() - Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
-		System.out.println("Higher CI " + (stats.getMean() + Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
+		System.out.println();
+		System.out.println("=============================== Estatísticas");
+		System.out.println("Download Time - Mean " + stats.getMean());
+		System.out.println("Download Time - Lower CI " + (stats.getMean() - Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
+		System.out.println("Download Time - Higher CI " + (stats.getMean() + Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
+		System.out.println();
+		System.out.println("Population - Mean: " + statsMeanPopulation.getMean());
 	}
 
 }
