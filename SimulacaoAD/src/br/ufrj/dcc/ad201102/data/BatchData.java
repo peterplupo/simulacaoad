@@ -57,8 +57,9 @@ public class BatchData implements Comparable<BatchData> {
 		if (invalidTime(time)) {
 			return;
 		}
-		populationSize.put(time, size);
-		totalPopulation = totalPopulation + size;
+		//comentar estas duas linhas para rodar os cenários fechados
+		populationSize.put(time, size); //esta
+		totalPopulation = totalPopulation + size; //esta
 	}
 
 	public void addExit(double time) {
