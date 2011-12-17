@@ -72,6 +72,10 @@ public class Peer {
 			return null;
 		}
 		
+		if (chosenPeer.isSeed()) {
+			return null;
+		}
+		
 		//transverse through all peers in no order (shuffled collection)
 //		for (Peer peer : shuffledPeers) {
 			//compare signatures
