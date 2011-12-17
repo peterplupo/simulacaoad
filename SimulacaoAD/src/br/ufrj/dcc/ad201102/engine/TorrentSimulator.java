@@ -52,10 +52,12 @@ public class TorrentSimulator {
 		params.setBlocksNumber(1);
 		simulator = new TorrentSimulator(params);
 		simulator.simulate();
-		ReportGenerator.getPopulationSize("reports" + TYPE_SCENARIO, Measurement.getBatchData(true));
-		ReportGenerator.getPopulationPMF("reports" + TYPE_SCENARIO, Measurement.getBatchData(false));
-		ReportGenerator.getDownloadTimeCDF("reports" + TYPE_SCENARIO, Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime("reports" + TYPE_SCENARIO, Measurement.getBatchData(false));
+		
+		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
+		ReportGenerator.getPopulationSize(filePrefix, Measurement.getBatchData(true));
+		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
+		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
+		ReportGenerator.getMeanDownloadTime(filePrefix, Measurement.getBatchData(false));
 		
 //		params = new Scenario().getScenario(12);
 //		simulator = new TorrentSimulator(params);
