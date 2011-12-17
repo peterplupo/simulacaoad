@@ -18,6 +18,7 @@ public class BatchData implements Comparable<BatchData> {
 //	private Collection<Double> exits = new TreeSet<Double>();
 	private DescriptiveStatistics exitsStatistics = new DescriptiveStatistics();
 	private int batchNumber;
+	private static boolean populationStatsOn = true;
 	
 	public double getOutput() {
 		return exitsStatistics.getN()/(endTime-startTime);
@@ -57,9 +58,18 @@ public class BatchData implements Comparable<BatchData> {
 		if (invalidTime(time)) {
 			return;
 		}
-		//comentar estas duas linhas para rodar os cenários fechados
-		populationSize.put(time, size); //esta
-		totalPopulation = totalPopulation + size; //esta
+		if (populationStatsOn) {
+			populationSize.put(time, size);
+			totalPopulation = totalPopulation + size;
+		}
+	}
+	
+	public static void setPopulationStatsOn(boolean status) {
+		populationStatsOn = status;
+	}
+	
+	public static boolean isPopulationStatsOn() {
+		return populationStatsOn;
 	}
 
 	public void addExit(double time) {
