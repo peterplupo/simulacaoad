@@ -1,6 +1,5 @@
 package br.ufrj.dcc.ad201102.events;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import br.ufrj.dcc.ad201102.data.BatchData;
@@ -12,17 +11,19 @@ public abstract class Event implements Comparable<Event>{
 	Collection<Peer> peers;
 	Peer peer;
 	BatchData batchData;
+	Collection<Event> events;
 
 	public double getTime() {
 		return time;
 	}
 
-	public Event(double time, Peer peer, Collection<Peer> peers, BatchData batchData) {
+	public Event(double time, Peer peer, Collection<Peer> peers, BatchData batchData, Collection<Event> events) {
 		super();
 		this.time = time;
 		this.peer = peer;
 		this.peers = peers;
 		this.batchData = batchData;
+		this.events = events;
 	}
 
 	@Override
@@ -30,12 +31,10 @@ public abstract class Event implements Comparable<Event>{
 		return new Double(time).compareTo(new Double(o.getTime()));
 	}
 
-	public Collection<Event> nextEvents(BatchData batchData) {
-		Collection<Event> events = new ArrayList<Event>();
-		runEvent(events, batchData);
-		return events;
+	public void nextEvents(BatchData batchData) {
+		runEvent(batchData);
 	}
 
-	abstract void runEvent(Collection<Event> events, BatchData batchData);
+	abstract void runEvent(BatchData batchData);
 	
 }

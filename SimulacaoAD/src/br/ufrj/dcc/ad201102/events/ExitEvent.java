@@ -17,15 +17,16 @@ public class ExitEvent extends Event {
 	public static double P;
 	public static Uniform EXIT_PROBABILITY;
 	
-	public ExitEvent(double time, Peer peer, Collection<Peer> peers, BatchData batchData) {
-		super(time, peer, peers, batchData);
+	public ExitEvent(double time, Peer newPeer, Collection<Peer> peers, BatchData batchData, Collection<Event> events) {
+		super(time, newPeer, peers, batchData, events);
 	}
 
 	@Override
-	void runEvent(Collection<Event> events, BatchData newBatchData) {
+	void runEvent(BatchData newBatchData) {
 		peers.remove(peer);
+		events.removeAll(peer.getUploadEvents());
 		if (P > EXIT_PROBABILITY.nextRandom()) {
-			events.add(new ArrivalEvent(time, new Peer(), peers, newBatchData));
+			events.add(new ArrivalEvent(time, new Peer(), peers, newBatchData, events));
 		}
 		batchData.addPopulationSize(time, peers.size());
 		batchData.addExit(time);
