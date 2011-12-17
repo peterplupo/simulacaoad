@@ -47,17 +47,17 @@ public class TorrentSimulator {
 		SimulationParameters params;
 		TorrentSimulator simulator;
 		
-		params = new Scenario().getScenario(TYPE_SCENARIO);
-		params.setTransientSize(5000);
-		params.setBlocksNumber(1);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		
-		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
-		ReportGenerator.getPopulationSize(filePrefix, Measurement.getBatchData(true));
-		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
-		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime(filePrefix, Measurement.getBatchData(false));
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
+//		params.setTransientSize(5000);
+//		params.setBlocksNumber(1);
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		
+//		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
+//		ReportGenerator.getPopulationSize(filePrefix, Measurement.getBatchData(true));
+//		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
+//		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
+//		ReportGenerator.getMeanDownloadTime(filePrefix, Measurement.getBatchData(false));
 		
 //		params = new Scenario().getScenario(12);
 //		simulator = new TorrentSimulator(params);
@@ -94,15 +94,15 @@ public class TorrentSimulator {
 //		ReportGenerator.getDownloadTimeCDF("reports23", Measurement.getBatchData(false));
 //		ReportGenerator.getMeanDownloadTime("reports23", Measurement.getBatchData(false));
 //		
-//		params = new Scenario().getScenario(30);
-//		for (int i = 1; i <= 50; i++) {
-//			logger.info("Run "+ i +" started.");
-//			params.setInitialPopulationSize(i);
-//			simulator = new TorrentSimulator(params);
-//			simulator.simulate();
-//			Measurement.newRun(i);
-//		}
-//		ReportGenerator.getOutput("reports30", false);
+		params = new Scenario().getScenario(30);
+		for (int i = 1; i <= 50; i++) {
+			logger.info("Run "+ i +" started.");
+			params.setInitialPopulationSize(i);
+			simulator = new TorrentSimulator(params);
+			simulator.simulate();
+			Measurement.newRun(i);
+		}
+		ReportGenerator.getOutput("reports30", false);
 //		
 //		params = new Scenario().getScenario(40);
 //		for (int i = 1; i <= 50; i++) {
@@ -276,8 +276,10 @@ public class TorrentSimulator {
 	private void init(PriorityQueue<Event> events, Publisher publisher,
 			Collection<Peer> peers, double currentTime, BatchData batchData) {
 		if (initialPopulationSize == 0) {
+			BatchData.setPopulationStatsOn(true);
 			events.add(new ArrivalEvent(currentTime + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, batchData));
 		} else {
+			BatchData.setPopulationStatsOn(false);
 			for (int i = 1; i <= initialPopulationSize; i++) {
 				peers.add(new Peer());
 				events.add(new PeerUploadEvent(currentTime + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData));
