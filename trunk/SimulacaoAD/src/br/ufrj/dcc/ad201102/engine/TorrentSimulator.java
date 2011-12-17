@@ -47,11 +47,11 @@ public class TorrentSimulator {
 		SimulationParameters params;
 		TorrentSimulator simulator;
 		
-//		params = new Scenario().getScenario(TYPE_SCENARIO);
-//		params.setTransientSize(5000);
-//		params.setBlocksNumber(1);
-//		simulator = new TorrentSimulator(params);
-//		simulator.simulate();
+		params = new Scenario().getScenario(TYPE_SCENARIO);
+		params.setTransientSize(5000);
+		params.setBlocksNumber(1);
+		simulator = new TorrentSimulator(params);
+		simulator.simulate();
 //		
 //		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
 //		ReportGenerator.getPopulationSize(filePrefix, Measurement.getBatchData(true));
@@ -94,15 +94,15 @@ public class TorrentSimulator {
 //		ReportGenerator.getDownloadTimeCDF("reports23", Measurement.getBatchData(false));
 //		ReportGenerator.getMeanDownloadTime("reports23", Measurement.getBatchData(false));
 //		
-		params = new Scenario().getScenario(30);
-		for (int i = 1; i <= 50; i++) {
-			logger.info("Run "+ i +" started.");
-			params.setInitialPopulationSize(i);
-			simulator = new TorrentSimulator(params);
-			simulator.simulate();
-			Measurement.newRun(i);
-		}
-		ReportGenerator.getOutput("reports30", false);
+//		params = new Scenario().getScenario(30);
+//		for (int i = 1; i <= 50; i++) {
+//			logger.info("Run "+ i +" started.");
+//			params.setInitialPopulationSize(i);
+//			simulator = new TorrentSimulator(params);
+//			simulator.simulate();
+//			Measurement.newRun(i);
+//		}
+//		ReportGenerator.getOutput("reports30", false);
 //		
 //		params = new Scenario().getScenario(40);
 //		for (int i = 1; i <= 50; i++) {
