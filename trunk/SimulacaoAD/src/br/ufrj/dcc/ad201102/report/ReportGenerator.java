@@ -201,11 +201,13 @@ public class ReportGenerator {
 		}
 		System.out.println();
 		System.out.println("=============================== Statistics");
-		System.out.println("Download Time - Mean " + stats.getMean());
-		System.out.println("Download Time - Lower CI " + (stats.getMean() - Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
-		System.out.println("Download Time - Higher CI " + (stats.getMean() + Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
+		System.out.println("Download Time - Mean: " + stats.getMean());
+		System.out.println("Download Time - Lower CI: " + (stats.getMean() - Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
+		System.out.println("Download Time - Higher CI: " + (stats.getMean() + Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
 		System.out.println();
 		System.out.println("Population - Mean: " + statsMeanPopulation.getMean());
+		System.out.println("Population - Lower CI: " + (statsMeanPopulation.getMean() - Measurement.getConfidenceInterval95(statsMeanPopulation.getVariance(), statsMeanPopulation.getN())));
+		System.out.println("Population - Higher CI: " + (statsMeanPopulation.getMean() + Measurement.getConfidenceInterval95(statsMeanPopulation.getVariance(), statsMeanPopulation.getN())));
 	}
 
 }
