@@ -92,6 +92,6 @@ public class Measurement {
 	}
 	
 	public static double getConfidenceInterval95(double var, long n) {
-		return 3.92 * Math.sqrt(var)/Math.sqrt(n);
+		return 3.92 * var/Math.sqrt(n);
 	}
 }
