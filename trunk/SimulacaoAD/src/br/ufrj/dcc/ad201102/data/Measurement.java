@@ -13,9 +13,20 @@ public class Measurement {
 	private static boolean transientBatch;
 	private static Map<Integer, BatchData> simulationData = new TreeMap<Integer, BatchData>();
 	private static Map<Integer, Map<Integer, BatchData>> multipleSimulations = new TreeMap<Integer, Map<Integer, BatchData>>();
+	static boolean populationStatsOn = true;
+	private static Map<Double, Integer> eventsPerTime = new TreeMap<Double, Integer>();
+	
+	public static void setPopulationStatsOn(boolean status) {
+		populationStatsOn = status;
+	}
+	
+	public static boolean isPopulationStatsOn() {
+		return populationStatsOn;
+	}
 	
 	public static void reset() {
 		simulationData = new TreeMap<Integer, BatchData>();
+		eventsPerTime =  new TreeMap<Double, Integer>();
 	}
 	
 	public static void newRun(Integer tag) {
@@ -93,5 +104,15 @@ public class Measurement {
 	
 	public static double getConfidenceInterval95(double var, long n) {
 		return (3.92 * Math.sqrt(var))/Math.sqrt(n);
+	}
+
+	public static Map<Double, Integer> getEventsPerTime() {
+		return eventsPerTime;
+	}
+
+	public static void addEventAt(double time, int events) {
+		if (populationStatsOn) {
+			eventsPerTime.put(time, events);
+		}
 	}
 }

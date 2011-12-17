@@ -14,11 +14,12 @@ public class BatchData implements Comparable<BatchData> {
 //	private Map<Double, Double> downloadTimes = new TreeMap<Double, Double>();
 	private DescriptiveStatistics downloadTimesStatistics = new DescriptiveStatistics();
 	private Map<Double, Integer> populationSize = new TreeMap<Double, Integer>();
+//	private Map<Double, Integer> downloadSize = new TreeMap<Double, Integer>();
 	private double totalPopulation;
 //	private Collection<Double> exits = new TreeSet<Double>();
 	private DescriptiveStatistics exitsStatistics = new DescriptiveStatistics();
 	private int batchNumber;
-	private static boolean populationStatsOn = true;
+	
 	
 	public double getOutput() {
 		return exitsStatistics.getN()/(endTime-startTime);
@@ -58,20 +59,17 @@ public class BatchData implements Comparable<BatchData> {
 		if (invalidTime(time)) {
 			return;
 		}
-		if (populationStatsOn) {
+		if (Measurement.populationStatsOn) {
 			populationSize.put(time, size);
 			totalPopulation = totalPopulation + size;
+//			downloadSize.put(time, (int)downloadTimesStatistics.getN());
 		}
 	}
 	
-	public static void setPopulationStatsOn(boolean status) {
-		populationStatsOn = status;
-	}
+//	public int getDownloadSizeAt(double time) {
+//		return downloadSize.get(time);
+//	}
 	
-	public static boolean isPopulationStatsOn() {
-		return populationStatsOn;
-	}
-
 	public void addExit(double time) {
 		if (invalidTime(time)) {
 			return;
