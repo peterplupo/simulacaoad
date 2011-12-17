@@ -27,6 +27,7 @@ import br.ufrj.dcc.ad201102.report.ReportGenerator;
 public class TorrentSimulator {
 	
 	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
+	private static Integer TYPE_SCENARIO = 12;
 	
 	double lambda;
 	int blocksNumber;
@@ -46,15 +47,15 @@ public class TorrentSimulator {
 		SimulationParameters params;
 		TorrentSimulator simulator;
 		
-		params = new Scenario().getScenario(11);
+		params = new Scenario().getScenario(TYPE_SCENARIO);
 		params.setTransientSize(5000);
 		params.setBlocksNumber(1);
 		simulator = new TorrentSimulator(params);
 		simulator.simulate();
-		ReportGenerator.getPopulationSize("reports11", Measurement.getBatchData(true));
-		ReportGenerator.getPopulationPMF("reports11", Measurement.getBatchData(false));
-		ReportGenerator.getDownloadTimeCDF("reports11", Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime("reports11", Measurement.getBatchData(false));
+		ReportGenerator.getPopulationSize("reports" + TYPE_SCENARIO, Measurement.getBatchData(true));
+		ReportGenerator.getPopulationPMF("reports" + TYPE_SCENARIO, Measurement.getBatchData(false));
+		ReportGenerator.getDownloadTimeCDF("reports" + TYPE_SCENARIO, Measurement.getBatchData(false));
+		ReportGenerator.getMeanDownloadTime("reports" + TYPE_SCENARIO, Measurement.getBatchData(false));
 		
 //		params = new Scenario().getScenario(12);
 //		simulator = new TorrentSimulator(params);
