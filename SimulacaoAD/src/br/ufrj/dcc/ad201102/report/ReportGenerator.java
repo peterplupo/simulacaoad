@@ -1,6 +1,8 @@
 package br.ufrj.dcc.ad201102.report;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
@@ -193,21 +195,81 @@ public class ReportGenerator {
 	}
 	
 	public static void getMeanDownloadTime(String filePrefix, Collection<BatchData> batches) {
-		DescriptiveStatistics stats = new DescriptiveStatistics();
+		
+		DescriptiveStatistics statsMeanDownloadTime = new DescriptiveStatistics();
+		DescriptiveStatistics statsMedianDownloadTime = new DescriptiveStatistics();
 		DescriptiveStatistics statsMeanPopulation = new DescriptiveStatistics();
+		
 		for (BatchData batch : batches) {
-			stats.addValue(batch.getMeanDownloadTime());
+			statsMeanDownloadTime.addValue(batch.getMeanDownloadTime());
 			statsMeanPopulation.addValue(batch.getMeanPopulation());
+			
+			
+			TreeMap<Double, Integer> timesFrequency = new TreeMap<Double, Integer>();
+			
+			for (Double downloadTime : batch.getDownloadTimes()) {
+				Integer times = timesFrequency.get(downloadTime);
+				if (times == null) {
+					timesFrequency.put(downloadTime, 1);
+				} else {
+					timesFrequency.put(downloadTime, timesFrequency.get(downloadTime) + 1);
+				}
+			}
+			
+			double acc = 0;
+			for (Map.Entry<Double, Integer> timeFrequency : timesFrequency.entrySet()) {
+				acc = acc + ((double)timeFrequency.getValue())/batch.getDownloadTimes().length;
+				if (Math.abs(acc-0.5) < 0.0001) {
+					statsMedianDownloadTime.addValue(timeFrequency.getKey());
+				}
+			}
+			
+			
 		}
+		
 		System.out.println();
 		System.out.println("=============================== Statistics");
-		System.out.println("Download Time - Mean: " + stats.getMean());
-		System.out.println("Download Time - Lower CI: " + (stats.getMean() - Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
-		System.out.println("Download Time - Higher CI: " + (stats.getMean() + Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN())));
+		System.out.println("Download Time - Mean: " + statsMeanDownloadTime.getMean());
+		System.out.println("Download Time - Lower CI: " + (statsMeanDownloadTime.getMean() - Measurement.getConfidenceInterval95(statsMeanDownloadTime.getVariance(), statsMeanDownloadTime.getN())));
+		System.out.println("Download Time - Higher CI: " + (statsMeanDownloadTime.getMean() + Measurement.getConfidenceInterval95(statsMeanDownloadTime.getVariance(), statsMeanDownloadTime.getN())));
 		System.out.println();
 		System.out.println("Population - Mean: " + statsMeanPopulation.getMean());
 		System.out.println("Population - Lower CI: " + (statsMeanPopulation.getMean() - Measurement.getConfidenceInterval95(statsMeanPopulation.getVariance(), statsMeanPopulation.getN())));
 		System.out.println("Population - Higher CI: " + (statsMeanPopulation.getMean() + Measurement.getConfidenceInterval95(statsMeanPopulation.getVariance(), statsMeanPopulation.getN())));
+		System.out.println();
+		System.out.println("Download Time - Median: " + statsMedianDownloadTime.getMean());
+		System.out.println("Download Time - Lower CI: " + (statsMedianDownloadTime.getMean() - Measurement.getConfidenceInterval95(statsMedianDownloadTime.getVariance(), statsMedianDownloadTime.getN())));
+		System.out.println("Download Time - Higher CI: " + (statsMedianDownloadTime.getMean() + Measurement.getConfidenceInterval95(statsMedianDownloadTime.getVariance(), statsMedianDownloadTime.getN())));
+		
+		
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(filePrefix + "PopDownloadTimeStats.txt"));
+			out.write("=============================== Statistics");
+			out.newLine();
+			out.write("Download Time - Mean: " + statsMeanDownloadTime.getMean());
+			out.newLine();
+			out.write("Download Time - Lower CI: " + (statsMeanDownloadTime.getMean() - Measurement.getConfidenceInterval95(statsMeanDownloadTime.getVariance(), statsMeanDownloadTime.getN())));
+			out.newLine();
+			out.write("Download Time - Higher CI: " + (statsMeanDownloadTime.getMean() + Measurement.getConfidenceInterval95(statsMeanDownloadTime.getVariance(), statsMeanDownloadTime.getN())));
+			out.newLine();
+			out.newLine();
+			out.write("Population - Mean: " + statsMeanPopulation.getMean());
+			out.newLine();
+			out.write("Population - Lower CI: " + (statsMeanPopulation.getMean() - Measurement.getConfidenceInterval95(statsMeanPopulation.getVariance(), statsMeanPopulation.getN())));
+			out.newLine();
+			out.write("Population - Higher CI: " + (statsMeanPopulation.getMean() + Measurement.getConfidenceInterval95(statsMeanPopulation.getVariance(), statsMeanPopulation.getN())));
+			out.newLine();
+			out.newLine();
+			out.write("Download Time - Median: " + statsMedianDownloadTime.getMean());
+			out.newLine();
+			out.write("Download Time - Lower CI: " + (statsMedianDownloadTime.getMean() - Measurement.getConfidenceInterval95(statsMedianDownloadTime.getVariance(), statsMedianDownloadTime.getN())));
+			out.newLine();
+			out.write("Download Time - Higher CI: " + (statsMedianDownloadTime.getMean() + Measurement.getConfidenceInterval95(statsMedianDownloadTime.getVariance(), statsMedianDownloadTime.getN())));
+			out.close();
+		} catch (IOException e)	{ 
+		}
+		
 	}
+	
 
 }
