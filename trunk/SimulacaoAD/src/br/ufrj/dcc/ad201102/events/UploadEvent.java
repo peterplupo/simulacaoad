@@ -11,23 +11,25 @@ public abstract class UploadEvent extends Event {
 	
 	private static Logger logger = Logger.getLogger(UploadEvent.class);
 	
-	public UploadEvent(double time, Peer peer, Collection<Peer> peers, BatchData batchData) {
-		super(time, peer, peers, batchData);
+	public UploadEvent(double time, Peer newPeer, Collection<Peer> peers, BatchData batchData, Collection<Event> events) {
+		super(time, newPeer, peers, batchData, events);
 	}
 
 	@Override
-	void runEvent(Collection<Event> events, BatchData newbatchData) {
+	void runEvent(BatchData newbatchData) {
 		Peer destinationPeer = peer.sendBlock(peers);
-		logger.debug(batchData + " " + peer + " uploaded at " + time);
+		if (destinationPeer != null) {
+			logger.debug(batchData + " " + peer + " uploaded at " + time + " to peer " + destinationPeer);
+		}
 		if (destinationPeer != null && destinationPeer.isSeed() && destinationPeer.getExitTime() == 0) {
 			destinationPeer.setExitTime(time + ExitEvent.EXIT_CLOCK.nextRandom());
-			events.add(new ExitEvent(destinationPeer.getExitTime(), destinationPeer, peers, newbatchData));
+			events.add(new ExitEvent(destinationPeer.getExitTime(), destinationPeer, peers, newbatchData, events));
 			batchData.addDownloadTime(time, time - destinationPeer.getArrivalTime());
 			logger.debug(batchData + " " + destinationPeer + " will exit at " + destinationPeer.getExitTime() + ". Download time measure " + (time - destinationPeer.getArrivalTime()) + " registered.");
 		}
-		addNextUploadEvent(events, newbatchData);
+		addNextUploadEvent(newbatchData);
 	}
 	
-	abstract void addNextUploadEvent(Collection<Event> events, BatchData newbatchData);
+	abstract void addNextUploadEvent(BatchData newbatchData);
 	
 }

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import br.ufrj.dcc.ad201102.engine.Uniform;
+import br.ufrj.dcc.ad201102.events.PeerUploadEvent;
 
 public class Peer {
 
@@ -21,6 +22,7 @@ public class Peer {
 	private double exitTime;
 	private double arrivalTime;
 	private String id;
+	private Collection<PeerUploadEvent> scheduledUploads = new ArrayList<PeerUploadEvent>();
 	
 	public Peer() {
 		signature = new boolean[BLOCKS_NUMBER];
@@ -134,4 +136,15 @@ public class Peer {
 		this.arrivalTime = arrivalTime;
 	}
 
+	public void addUploadEvent(PeerUploadEvent peerUploadEvent) {
+		scheduledUploads.add(peerUploadEvent);
+	}
+	
+	public void removeUploadEvent(PeerUploadEvent peerUploadEvent) {
+		scheduledUploads.remove(peerUploadEvent);
+	}
+
+	public Collection<PeerUploadEvent> getUploadEvents() {
+		return scheduledUploads;
+	}
 }

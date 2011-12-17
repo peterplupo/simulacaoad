@@ -10,17 +10,19 @@ public class PeerUploadEvent extends UploadEvent {
 	
 	public static Exponential PEER_UPLOAD_CLOCK;
 	
-	public PeerUploadEvent(double time, Peer peer, Collection<Peer> peers, BatchData batchData) {
-		super(time, peer, peers, batchData);
+	public PeerUploadEvent(double time, Peer newPeer, Collection<Peer> peers, BatchData batchData, Collection<Event> events) {
+		super(time, newPeer, peers, batchData, events);
 	}
 
 	@Override
-	void addNextUploadEvent(Collection<Event> events, BatchData newbatchData) {
-		
+	void addNextUploadEvent(BatchData newbatchData) {
 		double uploadTime = time + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom();
 		
 		if (!peer.isSeed() || (peer.isSeed() && uploadTime < peer.getExitTime())) {
-			events.add(new PeerUploadEvent(uploadTime, peer, peers, newbatchData));
+			PeerUploadEvent peerUploadEvent = new PeerUploadEvent(uploadTime, peer, peers, newbatchData, events);
+			events.add(peerUploadEvent);
+			peer.removeUploadEvent(this);
+			peer.addUploadEvent(peerUploadEvent);
 		}
 	}
 	

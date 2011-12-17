@@ -11,13 +11,13 @@ public class PublisherUploadEvent extends UploadEvent {
 	
 	public static Exponential PUBLISHER_UPLOAD_CLOCK;
 	
-	public PublisherUploadEvent(double time, Publisher publisher, Collection<Peer> peers, BatchData batchData) {
-		super(time, publisher, peers, batchData);
+	public PublisherUploadEvent(double time, Peer newPeer, Collection<Peer> peers, BatchData batchData, Collection<Event> events) {
+		super(time, newPeer, peers, batchData, events);
 	}
 
 	@Override
-	void addNextUploadEvent(Collection<Event> events, BatchData newBatchData) {
-		events.add(new PublisherUploadEvent(time + PUBLISHER_UPLOAD_CLOCK.nextRandom(), (Publisher)peer, peers, newBatchData));
+	void addNextUploadEvent(BatchData newBatchData) {
+		events.add(new PublisherUploadEvent(time + PUBLISHER_UPLOAD_CLOCK.nextRandom(), (Publisher)peer, peers, newBatchData, events));
 	}
 	
 }
