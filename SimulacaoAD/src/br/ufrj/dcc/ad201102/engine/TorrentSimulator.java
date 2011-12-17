@@ -47,8 +47,8 @@ public class TorrentSimulator {
 		TorrentSimulator simulator;
 		
 		params = new Scenario().getScenario(11);
-		params.setTransientSize(100);
-		params.setBlocksNumber(10);
+		params.setTransientSize(5000);
+		params.setBlocksNumber(1);
 		simulator = new TorrentSimulator(params);
 		simulator.simulate();
 		ReportGenerator.getPopulationSize("reports11", Measurement.getBatchData(true));
@@ -212,7 +212,7 @@ public class TorrentSimulator {
 		}
 		
 		int batchNumber = 0;
-		ArrayList<Double> medianDownloadTimes = new ArrayList<Double>();
+//		ArrayList<Double> medianDownloadTimes = new ArrayList<Double>();
 		while(!Measurement.confidenceInterval95()) {
 //			currentTime = 0;
 //			System.out.println(batchNumber);
@@ -221,7 +221,7 @@ public class TorrentSimulator {
 			batchData.setInitialBatchPopulation(peers.size());
 //			for (int batchEvent = 0; batchEvent< batchSize; batchEvent++) {
 			boolean firstEvent = true;
-			while (batchSize > batchData.getDownloadTimes().size()) {
+			while (batchSize > batchData.getDownloadTimes().length) {
 				Event currentEvent = events.poll();
 				currentTime = currentEvent.getTime();
 				
@@ -236,17 +236,18 @@ public class TorrentSimulator {
 			batchData.setEndTime(currentTime);
 			logger.info(batchNumber + " batch finished at "+ currentTime +".");
 			
-			medianDownloadTimes.add(batchData.getMedianDownloadTime());
+//			medianDownloadTimes.add(batchData.getMedianDownloadTime());
 			
 			batchNumber++;
 			
-			if (batchNumber % 1000 == 0) {
-				System.gc();
-				Thread.yield();
-			}
+//			if (batchNumber % 30 == 0) {
+//				System.gc();
+//				Thread.yield();
+//			}
+			
 		}
 		
-		
+		events.clear();
 		logger.info("Simulation end.");
 		
 		

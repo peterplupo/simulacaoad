@@ -1,12 +1,7 @@
 package br.ufrj.dcc.ad201102.data;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 
@@ -16,16 +11,16 @@ public class BatchData implements Comparable<BatchData> {
 	private double endTime;
 	private int initialBatchPopulation;
 	private String id;
-	private Map<Double, Double> downloadTimes = new TreeMap<Double, Double>();
+//	private Map<Double, Double> downloadTimes = new TreeMap<Double, Double>();
 	private DescriptiveStatistics downloadTimesStatistics = new DescriptiveStatistics();
 	private Map<Double, Integer> populationSize = new TreeMap<Double, Integer>();
 	private double totalPopulation;
-	private Collection<Double> exits = new TreeSet<Double>();
+//	private Collection<Double> exits = new TreeSet<Double>();
 	private DescriptiveStatistics exitsStatistics = new DescriptiveStatistics();
 	private int batchNumber;
 	
 	public double getOutput() {
-		return exits.size()/(endTime-startTime);
+		return exitsStatistics.getN()/(endTime-startTime);
 	}
 	
 	public double getTotalPopulation() {
@@ -70,7 +65,7 @@ public class BatchData implements Comparable<BatchData> {
 		if (invalidTime(time)) {
 			return;
 		}
-		exits.add(time);
+//		exits.add(time);
 		exitsStatistics.addValue(time);
 	}
 	
@@ -118,7 +113,7 @@ public class BatchData implements Comparable<BatchData> {
 		if (invalidTime(time)) {
 			return;
 		}
-		downloadTimes.put(time, downloadTime);
+//		downloadTimes.put(time, downloadTime);
 		downloadTimesStatistics.addValue(downloadTime);
 	}
 
@@ -155,13 +150,13 @@ public class BatchData implements Comparable<BatchData> {
 		return downloadTimesStatistics.getMean();
 	}
 	
-	public Collection<Double> getDownloadTimes() {
-		return downloadTimes.values();
+	public double[] getDownloadTimes() {
+		return downloadTimesStatistics.getValues();//values();
 	}
 	
-	public Collection<Double> getExits() {
-		return exits;
-	}
+//	public Collection<Double> getExits() {
+//		return exits;
+//	}
 	
 	public Map<Double, Double> getPopulationCDF() {
 		double sumPopulation = 0;
@@ -183,34 +178,34 @@ public class BatchData implements Comparable<BatchData> {
 		return timeSumPopulation;
 	}
 	
-	public double getMedianDownloadTime(){
-		double median = 0.0;
-		this.getPopulationCDF();
-		int divisao = 0;
-		 ArrayList<Double> times = new ArrayList<Double>();
-		 Collections.sort(times);
-		 Iterator<Double> it = this.getDownloadTimes().iterator();
-		 while(it.hasNext()){
-			 times.add(it.next());
-		 }
-		 
-		
-		if((this.getDownloadTimes().size() %2) == 1) {
-			divisao = this.getDownloadTimes().size()/2;
-			median = times.get(divisao);
-			
-		} else {
-			divisao = this.getDownloadTimes().size()/2;
-			int central = ((divisao-1) + (divisao+1))/2;
-			median = times.get(central);
-		}
-		
-		return median;
-	}
-	
-	public Map<Double, Double> getDownloadTimesPerInstant() {
-		return downloadTimes;
-	}
+//	public double getMedianDownloadTime(){
+//		double median = 0.0;
+//		this.getPopulationCDF();
+//		int divisao = 0;
+//		 ArrayList<Double> times = new ArrayList<Double>();
+//		 Collections.sort(times);
+//		 Iterator<Double> it = this.getDownloadTimes().iterator();
+//		 while(it.hasNext()){
+//			 times.add(it.next());
+//		 }
+//		 
+//		
+//		if((this.getDownloadTimes().size() %2) == 1) {
+//			divisao = this.getDownloadTimes().size()/2;
+//			median = times.get(divisao);
+//			
+//		} else {
+//			divisao = this.getDownloadTimes().size()/2;
+//			int central = ((divisao-1) + (divisao+1))/2;
+//			median = times.get(central);
+//		}
+//		
+//		return median;
+//	}
+//	
+//	public Map<Double, Double> getDownloadTimesPerInstant() {
+//		return downloadTimes;
+//	}
 
 	
 }
