@@ -6,7 +6,7 @@ public class Scenario {
 	private static Logger logger = Logger.getLogger(Scenario.class);
 	private static final int QTD_BATCHES = 10;
 	private static final int BATCH_SIZE = 40;
-	private static final int TRANSIENT_SIZE = 90;
+	private static final int TRANSIENT_SIZE = 5000;
 
 	
 	public Scenario(){}

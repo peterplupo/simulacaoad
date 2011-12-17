@@ -34,9 +34,9 @@ public class ReportGenerator {
 		for (BatchData batch : batches) {
 			series2.add(batch.getStartTime(), batch.getOutput());
 			series3.add(batch.getStartTime(), batch.getMeanDownloadTime()/100);
-//			for (Map.Entry<Double, Integer> popTime : batch.getPopulationSize().entrySet()) {
-//				series.add((Number)popTime.getKey(), popTime.getValue());
-//			}
+			for (Map.Entry<Double, Integer> popTime : batch.getPopulationSize().entrySet()) {
+				series.add((Number)popTime.getKey(), popTime.getValue());
+			}
 		}
 		
 		data.addSeries(series);
@@ -130,7 +130,7 @@ public class ReportGenerator {
 			
 			double acc = 0;
 			for (Map.Entry<Double, Integer> timeFrequency : timesFrequency.entrySet()) {
-				acc = acc + ((double)timeFrequency.getValue())/batch.getDownloadTimes().size();
+				acc = acc + ((double)timeFrequency.getValue())/batch.getDownloadTimes().length;
 				series.add((Number)timeFrequency.getKey(), acc);
 			}
 			

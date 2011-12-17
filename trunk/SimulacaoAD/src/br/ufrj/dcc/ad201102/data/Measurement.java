@@ -70,7 +70,7 @@ public class Measurement {
 	}
 	
 	public static boolean confidenceInterval95() {
-		if (simulationData.size()<=2) {
+		if (simulationData.size()<=30) {
 			return false;
 		}
 		
