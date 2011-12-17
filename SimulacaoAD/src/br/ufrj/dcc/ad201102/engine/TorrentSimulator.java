@@ -27,7 +27,7 @@ import br.ufrj.dcc.ad201102.report.ReportGenerator;
 public class TorrentSimulator {
 	
 	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
-	private static Integer TYPE_SCENARIO = 13;
+	private static Integer TYPE_SCENARIO = 11;
 	
 	double lambda;
 	int blocksNumber;
@@ -50,12 +50,11 @@ public class TorrentSimulator {
 		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
 		
 		params = new Scenario().getScenario(TYPE_SCENARIO);
-//		params.setTransientSize(5000);
-//		params.setBlocksNumber(1);
+//		params.setBlocksNumber(10);
 		simulator = new TorrentSimulator(params);
 		simulator.simulate();
 		
-//		ReportGenerator.getPopulationSize(filePrefix, Measurement.getBatchData(true));
+//		ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
 		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
 		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
 		ReportGenerator.getMeanDownloadTime(filePrefix, Measurement.getBatchData(false));
@@ -195,7 +194,7 @@ public class TorrentSimulator {
 		Measurement.setTransientBatch(transientSize != 0);
 		double currentTime = 0;
 		BatchData batchData = null;
-		
+//		int eventCounter = 0;
 		if (Measurement.hasTransientBatch()) {
 			batchData = Measurement.getTransientBatchData();
 			init(events, publisher, peers, currentTime, batchData);
@@ -207,6 +206,8 @@ public class TorrentSimulator {
 					batchData.setStartTime(currentTime);
 				}
 				currentEvent.nextEvents(batchData);
+//				Measurement.addEventAt(currentTime, eventCounter);
+//				eventCounter++;
 			}
 			batchData.setEndTime(currentTime);
 			logger.info(-1 + " transient finished at "+ currentTime +".");
@@ -217,6 +218,7 @@ public class TorrentSimulator {
 		
 		int batchNumber = 0;
 //		ArrayList<Double> medianDownloadTimes = new ArrayList<Double>();
+		
 		while(!Measurement.confidenceInterval95()) {
 //			currentTime = 0;
 //			System.out.println(batchNumber);
@@ -234,6 +236,8 @@ public class TorrentSimulator {
 					logger.info(batchNumber + " batch started at "+ currentTime +".");
 				}
 				currentEvent.nextEvents(batchData);
+//				Measurement.addEventAt(currentTime, eventCounter);
+//				eventCounter++;
 			}
 			batchData.setEndTime(currentTime);
 			logger.info(batchNumber + " batch finished at "+ currentTime +".");
@@ -275,10 +279,10 @@ public class TorrentSimulator {
 	private void init(PriorityQueue<Event> events, Publisher publisher,
 			Collection<Peer> peers, double currentTime, BatchData batchData) {
 		if (initialPopulationSize == 0) {
-			BatchData.setPopulationStatsOn(true);
+			Measurement.setPopulationStatsOn(true);
 			events.add(new ArrivalEvent(currentTime + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, batchData, events));
 		} else {
-			BatchData.setPopulationStatsOn(false);
+			Measurement.setPopulationStatsOn(false);
 			for (int i = 1; i <= initialPopulationSize; i++) {
 				peers.add(new Peer());
 				events.add(new PeerUploadEvent(currentTime + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData, events));

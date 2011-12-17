@@ -26,27 +26,55 @@ import br.ufrj.dcc.ad201102.data.Measurement;
 
 public class ReportGenerator {
 	
-	public static void getPopulationSize(String filePrefix, Collection<BatchData> batches) {
+	public static void getTransientAnalisys(String filePrefix, Collection<BatchData> batches) {
 		XYSeriesCollection data = new XYSeriesCollection();
 
 		XYSeries series = new XYSeries("Tamanho da população");
-		XYSeries series2 = new XYSeries("Vazão média");
-		XYSeries series3 = new XYSeries("Tempo médio de download");
-		
+		XYSeries series2 = new XYSeries("Vazão média X 100");
+		XYSeries series3 = new XYSeries("Tempo médio de download / 10");
+//		Map<Double, Double> meanDownloadMeasures = new TreeMap<Double, Double>();
 		for (BatchData batch : batches) {
-			series2.add(batch.getStartTime(), batch.getOutput());
-			series3.add(batch.getStartTime(), batch.getMeanDownloadTime()/100);
+			series2.add(batch.getStartTime(), batch.getOutput()*100);
+			series3.add(batch.getStartTime(), batch.getMeanDownloadTime()/10);
 			for (Map.Entry<Double, Integer> popTime : batch.getPopulationSize().entrySet()) {
 				series.add((Number)popTime.getKey(), popTime.getValue());
+//				Double downloadMeasures = meanDownloadMeasures.get(popTime.getKey());
+//				if (downloadMeasures == null) {
+//					meanDownloadMeasures.put(popTime.getKey(), (double)batch.getDownloadSizeAt(popTime.getKey())/batches.size());
+//				} else {
+//					meanDownloadMeasures.put(popTime.getKey(), meanDownloadMeasures.get(popTime.getKey()) + (double)batch.getDownloadSizeAt(popTime.getKey())/batches.size());
+//				}
 			}
 		}
-		
 		data.addSeries(series);
 		data.addSeries(series2);
 		data.addSeries(series3);
+
+		
+//		XYSeries series4 = new XYSeries("Quantidade média de downloads registrados por batch");
+//		for (Map.Entry<Double, Double> downloadMeasures : meanDownloadMeasures.entrySet()) {
+//			series4.add((Number)downloadMeasures.getKey(), downloadMeasures.getValue()*10);
+//		}
+//		data.addSeries(series4);
+		
+//		XYSeries series5 = new XYSeries("Quantidade acumulada de eventos registrados / 1000");
+//		for (Map.Entry<Double, Integer> eventsSize : Measurement.getEventsPerTime().entrySet()) {
+//			series5.add((Number)eventsSize.getKey(), eventsSize.getValue()/1000);
+//			if (eventsSize.getValue() > 15000) {
+//				break;
+//			}
+//		}
+//
+//		data.addSeries(series5);
+		
+//		XYSeries series6 = new XYSeries("Fim da fase transiente");
+//		series6.add(687.5774024720748, 0);
+//		series6.add(687.5774024720748, 80);
+//		data.addSeries(series6);
+		
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
-            "PMF população",
+            "Fase Transiente",
             "Tempo", 
             "Tamanhos", 
             data,
@@ -57,7 +85,7 @@ public class ReportGenerator {
         );
         
         try {
-			ChartUtilities.saveChartAsPNG(new File(filePrefix + "popVazaoDownloadTempo.png"), chart, 600, 400);
+			ChartUtilities.saveChartAsPNG(new File(filePrefix + "faseTransiente.png"), chart, 600, 400);
 		} catch (IOException e) {
 		}
         
