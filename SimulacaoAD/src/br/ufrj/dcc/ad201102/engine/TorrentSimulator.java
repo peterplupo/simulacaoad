@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import br.ufrj.dcc.ad201102.data.BatchData;
@@ -13,6 +14,7 @@ import br.ufrj.dcc.ad201102.events.Event;
 import br.ufrj.dcc.ad201102.events.ExitEvent;
 import br.ufrj.dcc.ad201102.events.PeerUploadEvent;
 import br.ufrj.dcc.ad201102.events.PublisherUploadEvent;
+import br.ufrj.dcc.ad201102.events.UploadEvent;
 import br.ufrj.dcc.ad201102.model.Peer;
 import br.ufrj.dcc.ad201102.model.Publisher;
 import br.ufrj.dcc.ad201102.report.ReportGenerator;
@@ -27,7 +29,7 @@ import br.ufrj.dcc.ad201102.report.ReportGenerator;
 public class TorrentSimulator {
 	
 	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
-	private static Integer TYPE_SCENARIO = 11;
+	private static Integer TYPE_SCENARIO = 30;
 	
 	double lambda;
 	int blocksNumber;
@@ -50,80 +52,26 @@ public class TorrentSimulator {
 		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
 		
 		params = new Scenario().getScenario(TYPE_SCENARIO);
-//		params.setBlocksNumber(10);
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
+		
+		//execucao populacao aberta
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
+//		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
+//		ReportGenerator.getMeanDownloadTime(filePrefix, Measurement.getBatchData(false));
+		
+		//Execucao populacao fechada
+		for (int i = 1; i <= 50; i++) {
+			logger.info("Run "+ i +" started.");
+			params.setInitialPopulationSize(i);
+			simulator = new TorrentSimulator(params);
+			simulator.simulate();
+			Measurement.newRun(i);
+		}
+		ReportGenerator.getOutput(filePrefix, false);
+		
 		
 //		ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
-		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
-		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
-		ReportGenerator.getMeanDownloadTime(filePrefix, Measurement.getBatchData(false));
-		
-//		params = new Scenario().getScenario(12);
-//		simulator = new TorrentSimulator(params);
-//		simulator.simulate();
-//		ReportGenerator.getPopulationPMF("reports12", Measurement.getBatchData(false));
-//		ReportGenerator.getDownloadTimeCDF("reports12", Measurement.getBatchData(false));
-//		ReportGenerator.getMeanDownloadTime("reports12", Measurement.getBatchData(false));
-//		
-//		params = new Scenario().getScenario(13);
-//		simulator = new TorrentSimulator(params);
-//		simulator.simulate();
-//		ReportGenerator.getPopulationPMF("reports13", Measurement.getBatchData(false));
-//		ReportGenerator.getDownloadTimeCDF("reports13", Measurement.getBatchData(false));
-//		ReportGenerator.getMeanDownloadTime("reports13", Measurement.getBatchData(false));
-//		
-//		params = new Scenario().getScenario(21);
-//		simulator = new TorrentSimulator(params);
-//		simulator.simulate();
-//		ReportGenerator.getPopulationPMF("reports21", Measurement.getBatchData(false));
-//		ReportGenerator.getDownloadTimeCDF("reports21", Measurement.getBatchData(false));
-//		ReportGenerator.getMeanDownloadTime("reports21", Measurement.getBatchData(false));
-//		
-//		params = new Scenario().getScenario(22);
-//		simulator = new TorrentSimulator(params);
-//		simulator.simulate();
-//		ReportGenerator.getPopulationPMF("reports22", Measurement.getBatchData(false));
-//		ReportGenerator.getDownloadTimeCDF("reports22", Measurement.getBatchData(false));
-//		ReportGenerator.getMeanDownloadTime("reports22", Measurement.getBatchData(false));
-//		
-//		params = new Scenario().getScenario(23);
-//		simulator = new TorrentSimulator(params);
-//		simulator.simulate();
-//		ReportGenerator.getPopulationPMF("reports23", Measurement.getBatchData(false));
-//		ReportGenerator.getDownloadTimeCDF("reports23", Measurement.getBatchData(false));
-//		ReportGenerator.getMeanDownloadTime("reports23", Measurement.getBatchData(false));
-//		
-//		params = new Scenario().getScenario(30);
-//		for (int i = 1; i <= 50; i++) {
-//			logger.info("Run "+ i +" started.");
-//			params.setInitialPopulationSize(i);
-//			simulator = new TorrentSimulator(params);
-//			simulator.simulate();
-//			Measurement.newRun(i);
-//		}
-//		ReportGenerator.getOutput("reports30", false);
-//		
-//		params = new Scenario().getScenario(40);
-//		for (int i = 1; i <= 50; i++) {
-//			params.setInitialPopulationSize(i);
-//			simulator.simulate();
-//		}
-//		ReportGenerator.getOutput("reports40", Measurement.getBatchData(false));
-//		
-//		params = new Scenario().getScenario(50);
-//		for (int i = 1; i <= 50; i++) {
-//			params.setInitialPopulationSize(i);
-//			simulator.simulate();
-//		}
-//		ReportGenerator.getOutput("reports50", Measurement.getBatchData(false));
-//		
-//		params = new Scenario().getScenario(60);
-//		for (int i = 1; i <= 50; i++) {
-//			params.setInitialPopulationSize(i);
-//			simulator.simulate();
-//		}
-//		ReportGenerator.getOutput("reports40", Measurement.getBatchData(false));
 		
 //		params.lambda = 1;
 //		params.blocksNumber = 10;
@@ -209,6 +157,7 @@ public class TorrentSimulator {
 //				Measurement.addEventAt(currentTime, eventCounter);
 //				eventCounter++;
 			}
+			System.out.println("?");
 			batchData.setEndTime(currentTime);
 			logger.info(-1 + " transient finished at "+ currentTime +".");
 		} else {
@@ -284,8 +233,11 @@ public class TorrentSimulator {
 		} else {
 			Measurement.setPopulationStatsOn(false);
 			for (int i = 1; i <= initialPopulationSize; i++) {
-				peers.add(new Peer());
-				events.add(new PeerUploadEvent(currentTime + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData, events));
+				Peer peer = new Peer();
+				peers.add(peer);
+				PeerUploadEvent peerUploadEvent = new PeerUploadEvent(currentTime + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData, events);
+				events.add(peerUploadEvent);
+				peer.addUploadEvent(peerUploadEvent);
 			}
 		}
 		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData, events));
