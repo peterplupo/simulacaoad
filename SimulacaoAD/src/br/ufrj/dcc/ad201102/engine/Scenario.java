@@ -4,15 +4,18 @@ import org.apache.log4j.Logger;
 
 public class Scenario {
 	private static Logger logger = Logger.getLogger(Scenario.class);
-	private static final int QTD_BATCHES = 10;
 	private static final int BATCH_SIZE = 500;
 	private static final int TRANSIENT_SIZE = 5000;
+	private static final int RANDOM_SEED = 0;
 
 	
 	public Scenario(){}
 	
 	public SimulationParameters getScenario(int scenario){
 		SimulationParameters params = new SimulationParameters();
+		params.setRandomSeed(RANDOM_SEED);
+		params.setBatchSize(BATCH_SIZE);
+		params.setTransientSize(TRANSIENT_SIZE);
 		switch (scenario) {
 			case 11: 
 				params.setLambda(0.1);
@@ -23,10 +26,6 @@ public class Scenario {
 				params.setP(0);
 				params.setInitialPopulationSize(0);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			case 12: 
 				params.setLambda(0.5);
@@ -37,10 +36,6 @@ public class Scenario {
 				params.setP(0);
 				params.setInitialPopulationSize(0);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			case 13: 
 				params.setLambda(0.9);
@@ -51,10 +46,6 @@ public class Scenario {
 				params.setP(0);
 				params.setInitialPopulationSize(0);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			case 21:
 				params.setLambda(0.1);
@@ -65,10 +56,6 @@ public class Scenario {
 				params.setP(0);
 				params.setInitialPopulationSize(0);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			case 22:
 				params.setLambda(0.5);
@@ -79,10 +66,6 @@ public class Scenario {
 				params.setP(0);
 				params.setInitialPopulationSize(0);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			case 23:
 				params.setLambda(0.9);
@@ -93,10 +76,6 @@ public class Scenario {
 				params.setP(0);
 				params.setInitialPopulationSize(0);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			case 30:
 				params.setLambda(0.0);
@@ -107,10 +86,6 @@ public class Scenario {
 				params.setP(1);
 				params.setInitialPopulationSize(1);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			case 40:
 				params.setLambda(0.0);
@@ -121,10 +96,6 @@ public class Scenario {
 				params.setP(1);
 				params.setInitialPopulationSize(1);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;	
 			case 50:
 				params.setLambda(0.0);
@@ -135,10 +106,6 @@ public class Scenario {
 				params.setP(1);
 				params.setInitialPopulationSize(1);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			case 60:
 				params.setLambda(0.0);
@@ -149,10 +116,6 @@ public class Scenario {
 				params.setP(1);
 				params.setInitialPopulationSize(1);
 				params.setBlockRarity(false);
-				params.setRandomSeed(0);
-				params.setBatchSize(BATCH_SIZE);
-				params.setBatches(QTD_BATCHES);
-				params.setTransientSize(TRANSIENT_SIZE);
 				break;
 			default:
 				logger.error("Scenario is not valid.");

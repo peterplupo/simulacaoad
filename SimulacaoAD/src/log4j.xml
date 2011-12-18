@@ -20,7 +20,7 @@
 	</appender>
 
 	<logger name="br.ufrj.dcc.ad201102">
-        <level value="info"/>
+        <level value="debug"/>
     </logger>
 
 	<root>

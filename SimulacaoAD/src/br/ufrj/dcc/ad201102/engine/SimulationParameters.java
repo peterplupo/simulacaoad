@@ -11,7 +11,6 @@ public class SimulationParameters {
 	public boolean blockRarity;
 	public long randomSeed;
 	public int batchSize;
-	public int batches;
 	public int transientSize;
 	
 	/* GETTERS e SETTERS */
@@ -74,12 +73,6 @@ public class SimulationParameters {
 	}
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
-	}
-	public int getBatches() {
-		return batches;
-	}
-	public void setBatches(int batches) {
-		this.batches = batches;
 	}
 	public int getTransientSize() {
 		return transientSize;
