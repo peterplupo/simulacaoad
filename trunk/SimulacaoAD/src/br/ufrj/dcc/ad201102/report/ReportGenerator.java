@@ -92,10 +92,15 @@ public class ReportGenerator {
 	}
 	
 	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches) { 
-		getPopulationPMF(filePrefix, batches, 0, 0, 0);
+		getPopulationPMF(filePrefix, batches, 0, 0, 0, false);
 	}
 		
 	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches,  double lambda, double mi, double u) {
+		getPopulationPMF(filePrefix, batches, lambda, mi, u, true);
+	}
+	
+	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches,  double lambda, double mi, double u, boolean mm1) {
+		
 		XYSeriesCollection data = new XYSeriesCollection();
 
 		XYSeries series = new XYSeries("Media da população");
