@@ -91,10 +91,15 @@ public class ReportGenerator {
         
 	}
 	
-	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches) {
+	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches) { 
+		getPopulationPMF(filePrefix, batches, 0, 0, 0);
+	}
+		
+	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches,  double lambda, double mi, double u) {
 		XYSeriesCollection data = new XYSeriesCollection();
 
 		XYSeries series = new XYSeries("Media da população");
+		XYSeries series2 = new XYSeries("MM1");
 		
 		Map<Integer, Double> popProbDistRun = new TreeMap<Integer, Double>();
 		for (BatchData batch : batches) {
@@ -112,9 +117,12 @@ public class ReportGenerator {
 		
 		for (Map.Entry<Integer, Double> prob : popProbDistRun.entrySet()) {
 			series.add((Number)prob.getKey(), prob.getValue()/batches.size());
+			if (lambda != 0 || mi != 0 || u != 0)
+			series2.add((Number)prob.getKey(), Math.pow(lambda / (mi + u), prob.getKey())*(1 - lambda / (mi + u)));
 		}
 		
 		data.addSeries(series);
+		data.addSeries(series2);
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
             "PMF população",
