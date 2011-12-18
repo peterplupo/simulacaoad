@@ -20,7 +20,7 @@ import br.ufrj.dcc.ad201102.report.ReportGenerator;
 public class TorrentSimulator {
 	
 	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
-	private static Integer TYPE_SCENARIO = 30;
+	private static Integer TYPE_SCENARIO = 11;
 	
 	double lambda;
 	int blocksNumber;
@@ -48,7 +48,7 @@ public class TorrentSimulator {
 		if (params.getInitialPopulationSize() == 0) {
 			simulator = new TorrentSimulator(params);
 			simulator.simulate();
-			ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
+			ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false), params.getLambda(), params.getMi(), params.getU());
 			ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
 			ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
 		} else {
