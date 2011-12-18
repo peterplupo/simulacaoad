@@ -89,7 +89,7 @@ public class Measurement {
 		for (BatchData batch : getBatchData(false)) {
 			stat.addValue(batch.getMeanDownloadTime());
 		}
-		return valueConfidenceInterval95()<0.05*stat.getMean();
+		return valueConfidenceInterval95()<0.1*stat.getMean();
 	}
 	
 	public static double valueConfidenceInterval95() {

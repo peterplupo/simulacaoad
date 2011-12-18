@@ -189,7 +189,7 @@ public class ReportGenerator {
 	
 	public static void getOutput(String filePrefix, boolean fetchTransient) {
 
-		XYIntervalSeries xyintervalseries = new XYIntervalSeries("");
+		XYIntervalSeries xyintervalseries = new XYIntervalSeries("Vazão");
 		
 		int runsCounter = 0;
 		for (Map<Integer, BatchData> simulationData : Measurement.getRuns().values()) {

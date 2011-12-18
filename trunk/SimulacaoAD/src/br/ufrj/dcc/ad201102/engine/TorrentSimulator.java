@@ -20,7 +20,7 @@ import br.ufrj.dcc.ad201102.report.ReportGenerator;
 public class TorrentSimulator {
 	
 	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
-	private static Integer TYPE_SCENARIO = 11;
+	private static Integer TYPE_SCENARIO = 30;
 	
 	double lambda;
 	int blocksNumber;
@@ -45,22 +45,21 @@ public class TorrentSimulator {
 		params = new Scenario().getScenario(TYPE_SCENARIO);
 		
 		//execucao populacao aberta
-		simulator = new TorrentSimulator(params);
-		simulator.simulate();
-		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
-		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
-		ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
+//		simulator = new TorrentSimulator(params);
+//		simulator.simulate();
+//		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
+//		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
+//		ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
 		
 		//Execucao populacao fechada
-//		for (int i = 1; i <= 50; i++) {
-//			logger.info("Run "+ i +" started.");
-//			params.setInitialPopulationSize(i);
-//			simulator = new TorrentSimulator(params);
-//			simulator.simulate();
-//			Measurement.newRun(i);
-//		}
-//		ReportGenerator.getOutput(filePrefix, false);
-//		ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
+		for (int i = 1; i <= 50; i++) {
+			logger.info("Run "+ i +" started.");
+			params.setInitialPopulationSize(i);
+			simulator = new TorrentSimulator(params);
+			simulator.simulate();
+			Measurement.newRun(i);
+		}
+		ReportGenerator.getOutput(filePrefix, false);
 		
 		
 //		ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
