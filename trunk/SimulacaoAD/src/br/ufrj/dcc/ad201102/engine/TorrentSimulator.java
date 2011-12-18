@@ -20,7 +20,7 @@ import br.ufrj.dcc.ad201102.report.ReportGenerator;
 public class TorrentSimulator {
 	
 	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
-	private static Integer TYPE_SCENARIO = 11;
+	private static Integer TYPE_SCENARIO = 23;
 	
 	double lambda;
 	int blocksNumber;
@@ -32,7 +32,6 @@ public class TorrentSimulator {
 	boolean blockRarity;
 	long randomSeed;
 	int batchSize;
-//	int batches;
 	private int transientSize = 100;
 	
 	public static void main(String[] args) {
@@ -43,18 +42,18 @@ public class TorrentSimulator {
 		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
 		
 		params = new Scenario().getScenario(TYPE_SCENARIO);
-		params.setBlockRarity(true);
+//		params.setBlockRarity(true);
 		//execucao populacao aberta
 		if (params.getInitialPopulationSize() == 0) {
 			simulator = new TorrentSimulator(params);
 			simulator.simulate();
-			ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false), params.getLambda(), params.getMi(), params.getU());
+			ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));//, params.getLambda(), params.getMi(), params.getU());
 			ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
 			ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
 //			ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
 		} else {
 			//Execucao populacao fechada
-			for (int i = 50; i <= 50; i++) {
+			for (int i = 1; i <= 50; i++) {
 				logger.info("Run "+ i +" started.");
 				params.setInitialPopulationSize(i);
 				simulator = new TorrentSimulator(params);
@@ -84,7 +83,7 @@ public class TorrentSimulator {
 	
 	public TorrentSimulator(double lambda, int blocksNumber, double mi,
 			double u, double gama, double p, int initialPopulationSize,
-			boolean blockRarity, long randomSeed, int batchSize, int batches, int transientSize) {
+			boolean blockRarity, long randomSeed, int batchSize, int transientSize) {
 		super();
 		this.lambda = lambda;
 		this.blocksNumber = blocksNumber;
@@ -96,7 +95,6 @@ public class TorrentSimulator {
 		this.blockRarity = blockRarity;
 		this.randomSeed = randomSeed;
 		this.batchSize = batchSize;
-//		this.batches = batches;
 		this.transientSize = transientSize;
 	}
 
@@ -112,7 +110,6 @@ public class TorrentSimulator {
 		params.blockRarity,
 		params.randomSeed,
 		params.batchSize,
-		params.batches,
 		params.transientSize);
 	}
 
@@ -162,7 +159,6 @@ public class TorrentSimulator {
 		while(!Measurement.confidenceInterval95()) {
 			batchData = Measurement.getBatchData(batchNumber);
 			batchData.setInitialBatchPopulation(peers.size());
-//			for (int batchEvent = 0; batchEvent< batchSize; batchEvent++) {
 			boolean firstEvent = true;
 			while (batchSize > batchData.getDownloadTimes().length) {
 				Event currentEvent = events.poll();
