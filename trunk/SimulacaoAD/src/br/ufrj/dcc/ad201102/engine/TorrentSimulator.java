@@ -59,6 +59,7 @@ public class TorrentSimulator {
 //		ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
 //		ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
 //		ReportGenerator.getMeanDownloadTime(filePrefix, Measurement.getBatchData(false));
+//		ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
 		
 		//Execucao populacao fechada
 		for (int i = 1; i <= 50; i++) {
@@ -69,6 +70,7 @@ public class TorrentSimulator {
 			Measurement.newRun(i);
 		}
 		ReportGenerator.getOutput(filePrefix, false);
+		ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
 		
 		
 //		ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));

@@ -222,7 +222,7 @@ public class ReportGenerator {
         
 	}
 	
-	public static void getMeanDownloadTime(String filePrefix, Collection<BatchData> batches) {
+	public static void getTimes(String filePrefix, Collection<BatchData> batches) {
 		
 		DescriptiveStatistics statsMeanDownloadTime = new DescriptiveStatistics();
 		DescriptiveStatistics statsMedianDownloadTime = new DescriptiveStatistics();
