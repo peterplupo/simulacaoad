@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.PriorityQueue;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import br.ufrj.dcc.ad201102.data.BatchData;
@@ -14,17 +13,9 @@ import br.ufrj.dcc.ad201102.events.Event;
 import br.ufrj.dcc.ad201102.events.ExitEvent;
 import br.ufrj.dcc.ad201102.events.PeerUploadEvent;
 import br.ufrj.dcc.ad201102.events.PublisherUploadEvent;
-import br.ufrj.dcc.ad201102.events.UploadEvent;
 import br.ufrj.dcc.ad201102.model.Peer;
 import br.ufrj.dcc.ad201102.model.Publisher;
 import br.ufrj.dcc.ad201102.report.ReportGenerator;
-
-
-
-//otimizações:
-//1 só enviar blocos úteis
-//2 download ao invés de upload (melhora?)
-//3 enviar e receber simultaneamente (pode? não é só a política de escolha e de envio que pode mudar?)
 
 public class TorrentSimulator {
 	
@@ -159,7 +150,6 @@ public class TorrentSimulator {
 //				Measurement.addEventAt(currentTime, eventCounter);
 //				eventCounter++;
 			}
-			System.out.println("?");
 			batchData.setEndTime(currentTime);
 			logger.info(-1 + " transient finished at "+ currentTime +".");
 		} else {
