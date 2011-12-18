@@ -63,7 +63,7 @@ public class Measurement {
 	}
 	
 	public static Collection<BatchData> getBatchData(boolean fetchTransient) {
-		if (!hasTransientBatch() || fetchTransient == hasTransientBatch()) {
+		if (!hasTransientBatch() || fetchTransient == hasTransientBatch() || simulationData.size() == 0) {
 			return simulationData.values();
 		} else {
 			if (!fetchTransient && hasTransientBatch()) {
@@ -89,7 +89,7 @@ public class Measurement {
 		for (BatchData batch : getBatchData(false)) {
 			stat.addValue(batch.getMeanDownloadTime());
 		}
-		return valueConfidenceInterval95()<0.1*stat.getMean();
+		return valueConfidenceInterval95()<0.05*stat.getMean();
 	}
 	
 	public static double valueConfidenceInterval95() {
