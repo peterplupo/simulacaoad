@@ -33,6 +33,7 @@ public class TorrentSimulator {
 	long randomSeed;
 	int batchSize;
 	private int transientSize = 100;
+	private static boolean transientAnalisys = false;
 	
 	public static void main(String[] args) {
 		
@@ -44,13 +45,24 @@ public class TorrentSimulator {
 		params = new Scenario().getScenario(TYPE_SCENARIO);
 //		params.setBlockRarity(true);
 		//execucao populacao aberta
+		if (params.isBlockRarity()) {
+			filePrefix = filePrefix + "rarity";
+		}
 		if (params.getInitialPopulationSize() == 0) {
+			if (transientAnalisys) {
+				params.setBlocksNumber(10);
+			}
 			simulator = new TorrentSimulator(params);
 			simulator.simulate();
-			ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));//, params.getLambda(), params.getMi(), params.getU());
+			ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
 			ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
 			ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
-//			ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
+			if (transientAnalisys) {
+				ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
+			}
+			if (TYPE_SCENARIO < 13) {
+				ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false), params.getLambda(), params.getMi(), params.getU());
+			}
 		} else {
 			//Execucao populacao fechada
 			for (int i = 1; i <= 50; i++) {
@@ -62,7 +74,9 @@ public class TorrentSimulator {
 				Measurement.newRun(i);
 			}
 			ReportGenerator.getOutput(filePrefix, false);
-//			ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
+			if (transientAnalisys) {
+				ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
+			}
 		}
 		
 //		params.lambda = 1;
@@ -133,7 +147,7 @@ public class TorrentSimulator {
 		Measurement.setTransientBatch(transientSize != 0);
 		double currentTime = 0;
 		BatchData batchData = null;
-//		int eventCounter = 0;
+		int eventCounter = 0;
 		if (Measurement.hasTransientBatch()) {
 			batchData = Measurement.getTransientBatchData();
 			init(events, publisher, peers, seeds, currentTime, batchData);
@@ -145,8 +159,10 @@ public class TorrentSimulator {
 					batchData.setStartTime(currentTime);
 				}
 				currentEvent.nextEvents(batchData);
-//				Measurement.addEventAt(currentTime, eventCounter);
-//				eventCounter++;
+				if (transientAnalisys) {
+					Measurement.addEventAt(currentTime, eventCounter);
+					eventCounter++;
+				}
 			}
 			batchData.setEndTime(currentTime);
 			logger.info(-1 + " transient finished at "+ currentTime +".");
@@ -164,15 +180,17 @@ public class TorrentSimulator {
 			boolean firstEvent = true;
 			while (batchSize > batchData.getDownloadTimes().length) {
 				Event currentEvent = events.poll();
-				currentTime = currentEvent.getTime();
 				if (firstEvent) {
+					logger.info(batchNumber + " batch started at "+ currentTime +".");
 					firstEvent = false;
 					batchData.setStartTime(currentTime);
-					logger.info(batchNumber + " batch started at "+ currentTime +".");
 				}
+				currentTime = currentEvent.getTime();
 				currentEvent.nextEvents(batchData);
-//				Measurement.addEventAt(currentTime, eventCounter);
-//				eventCounter++;
+				if (transientAnalisys) {
+					Measurement.addEventAt(currentTime, eventCounter);
+					eventCounter++;
+				}
 			}
 			batchData.setEndTime(currentTime);
 			logger.info(batchNumber + " batch finished at "+ currentTime +".");
@@ -204,7 +222,6 @@ public class TorrentSimulator {
 			}
 		}
 		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, seeds, batchData, events));
-//		events.add(new ExitEvent(currentTime + ExitEvent.EXIT_CLOCK.nextRandom(), null, peers, batchData, events));
 	}
 
 }
