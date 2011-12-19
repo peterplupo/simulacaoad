@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 
 public class Scenario {
 	private static Logger logger = Logger.getLogger(Scenario.class);
-	private static final int BATCH_SIZE = 5000;
+	private static final int BATCH_SIZE = 20000;
 	private static final int TRANSIENT_SIZE = 5000;
 	private static final int RANDOM_SEED = 0;
 
