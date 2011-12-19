@@ -20,7 +20,7 @@ import br.ufrj.dcc.ad201102.report.ReportGenerator;
 public class TorrentSimulator {
 	
 	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
-	private static Integer TYPE_SCENARIO = 23;
+	private static Integer TYPE_SCENARIO = 11;
 	
 	double lambda;
 	int blocksNumber;
@@ -128,6 +128,7 @@ public class TorrentSimulator {
 		PriorityQueue<Event> events = new PriorityQueue<Event>();
 		Publisher publisher = new Publisher(Peer.BLOCKS_NUMBER);
 		Collection<Peer> peers = new ArrayList<Peer>();
+		Collection<Peer> seeds = new ArrayList<Peer>();
 		
 		Measurement.setTransientBatch(transientSize != 0);
 		double currentTime = 0;
@@ -135,7 +136,7 @@ public class TorrentSimulator {
 //		int eventCounter = 0;
 		if (Measurement.hasTransientBatch()) {
 			batchData = Measurement.getTransientBatchData();
-			init(events, publisher, peers, currentTime, batchData);
+			init(events, publisher, peers, seeds, currentTime, batchData);
 			logger.info(-1 + " transient started at "+ currentTime +".");
 			for (int transientCounter = 0; transientCounter < transientSize; transientCounter++) {
 				Event currentEvent = events.poll();
@@ -151,13 +152,13 @@ public class TorrentSimulator {
 			logger.info(-1 + " transient finished at "+ currentTime +".");
 		} else {
 			batchData = Measurement.getBatchData(0);
-			init(events, publisher, peers, currentTime, batchData);
+			init(events, publisher, peers, seeds, currentTime, batchData);
 		}
 		
 		int batchNumber = 0;
 		
 		while(!Measurement.confidenceInterval95()) {
-//		for (int i = 0; i < 3; i++) {
+//		for (int i = 0; i < 11; i++) {
 			batchData = Measurement.getBatchData(batchNumber);
 			batchData.setInitialBatchPopulation(peers.size());
 			boolean firstEvent = true;
@@ -187,22 +188,22 @@ public class TorrentSimulator {
 	}
 
 	private void init(PriorityQueue<Event> events, Publisher publisher,
-			Collection<Peer> peers, double currentTime, BatchData batchData) {
+			Collection<Peer> peers, Collection<Peer> seeds, double currentTime, BatchData batchData) {
 		if (initialPopulationSize == 0) {
 			Measurement.setPopulationStatsOn(true);
-			events.add(new ArrivalEvent(currentTime + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, batchData, events));
+			events.add(new ArrivalEvent(currentTime + ArrivalEvent.PEERS_ARRIVAL.nextRandom(), new Peer(), peers, seeds, batchData, events));
 		} else {
 			Measurement.setPopulationStatsOn(false);
 			for (int i = 1; i <= initialPopulationSize; i++) {
 				Peer peer = new Peer();
 //				peer.addBlock(1);
 				peers.add(peer);
-				PeerUploadEvent peerUploadEvent = new PeerUploadEvent(currentTime + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData, events);
+				PeerUploadEvent peerUploadEvent = new PeerUploadEvent(currentTime + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom(), publisher, peers, seeds, batchData, events);
 				events.add(peerUploadEvent);
 				peer.addUploadEvent(peerUploadEvent);
 			}
 		}
-		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData, events));
+		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, seeds, batchData, events));
 //		events.add(new ExitEvent(currentTime + ExitEvent.EXIT_CLOCK.nextRandom(), null, peers, batchData, events));
 	}
 

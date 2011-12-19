@@ -12,18 +12,20 @@ public abstract class Event implements Comparable<Event>{
 	Peer peer;
 	BatchData batchData;
 	Collection<Event> events;
+	Collection<Peer> seeds;
 
 	public double getTime() {
 		return time;
 	}
 
-	public Event(double time, Peer peer, Collection<Peer> peers, BatchData batchData, Collection<Event> events) {
+	public Event(double time, Peer peer, Collection<Peer> peers, Collection<Peer> seeds, BatchData batchData, Collection<Event> events) {
 		super();
 		this.time = time;
 		this.peer = peer;
 		this.peers = peers;
 		this.batchData = batchData;
 		this.events = events;
+		this.seeds = seeds;
 	}
 
 	@Override

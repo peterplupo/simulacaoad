@@ -36,7 +36,8 @@ public class Peer {
 	
 	public void setSeed(boolean seed) {
 		this.seed = seed;
-		System.out.println(toString() + " is now a seed.");
+		id = "Seed" + id.substring(id.indexOf("#"));
+//		System.out.println(toString() + " is now a seed.");
 	}
 	
 	public boolean[] getSignature() {
@@ -64,23 +65,16 @@ public class Peer {
 	public Peer sendBlock(Collection<Peer> peers) {
 		List<Peer> shuffledPeers = new ArrayList<Peer>(peers);
 		shuffledPeers.remove(this);
-		Collections.shuffle(shuffledPeers, CHOICES.getRandom());
+//		Collections.shuffle(shuffledPeers, CHOICES.getRandom());
 		
 		Peer chosenPeer = null;
 		
 		if (shuffledPeers.size() != 0) {
-			for (Peer p : shuffledPeers) {
-				if (!p.isSeed()) {
-					chosenPeer = p;
-					break;
-				}
+			chosenPeer = shuffledPeers.get(CHOICES.getRandom().nextInt(shuffledPeers.size()));
+			if (chosenPeer.isSeed()) {
+				return null;
 			}
-//			chosenPeer = shuffledPeers.get(CHOICES.getRandom().nextInt(shuffledPeers.size()));
 		} else {
-			return null;
-		}
-		
-		if (chosenPeer == null) {
 			return null;
 		}
 		
