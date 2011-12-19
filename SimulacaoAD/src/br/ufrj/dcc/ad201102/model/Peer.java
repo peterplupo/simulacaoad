@@ -64,17 +64,23 @@ public class Peer {
 	public Peer sendBlock(Collection<Peer> peers) {
 		List<Peer> shuffledPeers = new ArrayList<Peer>(peers);
 		shuffledPeers.remove(this);
-//		Collections.shuffle(shuffledPeers, CHOICES.getRandom());
+		Collections.shuffle(shuffledPeers, CHOICES.getRandom());
 		
 		Peer chosenPeer = null;
 		
 		if (shuffledPeers.size() != 0) {
-			chosenPeer = shuffledPeers.get(CHOICES.getRandom().nextInt(shuffledPeers.size()));
+			for (Peer p : shuffledPeers) {
+				if (!p.isSeed()) {
+					chosenPeer = p;
+					break;
+				}
+			}
+//			chosenPeer = shuffledPeers.get(CHOICES.getRandom().nextInt(shuffledPeers.size()));
 		} else {
 			return null;
 		}
 		
-		if (chosenPeer.isSeed()) {
+		if (chosenPeer == null) {
 			return null;
 		}
 		

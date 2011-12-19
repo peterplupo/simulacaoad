@@ -157,6 +157,7 @@ public class TorrentSimulator {
 		int batchNumber = 0;
 		
 		while(!Measurement.confidenceInterval95()) {
+//		for (int i = 0; i < 3; i++) {
 			batchData = Measurement.getBatchData(batchNumber);
 			batchData.setInitialBatchPopulation(peers.size());
 			boolean firstEvent = true;
@@ -202,6 +203,7 @@ public class TorrentSimulator {
 			}
 		}
 		events.add(new PublisherUploadEvent(currentTime + PublisherUploadEvent.PUBLISHER_UPLOAD_CLOCK.nextRandom(), publisher, peers, batchData, events));
+//		events.add(new ExitEvent(currentTime + ExitEvent.EXIT_CLOCK.nextRandom(), null, peers, batchData, events));
 	}
 
 }
