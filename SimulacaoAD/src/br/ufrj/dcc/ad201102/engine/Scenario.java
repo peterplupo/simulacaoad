@@ -16,6 +16,7 @@ public class Scenario {
 		params.setRandomSeed(RANDOM_SEED);
 		params.setBatchSize(BATCH_SIZE);
 		params.setTransientSize(TRANSIENT_SIZE);
+		params.setBlockRarity(false);
 		switch (scenario) {
 			case 11: 
 				params.setLambda(0.1);
@@ -25,7 +26,6 @@ public class Scenario {
 				params.setGama(Double.POSITIVE_INFINITY);
 				params.setP(0);
 				params.setInitialPopulationSize(0);
-				params.setBlockRarity(false);
 				break;
 			case 12: 
 				params.setLambda(0.5);
@@ -35,7 +35,6 @@ public class Scenario {
 				params.setGama(Double.POSITIVE_INFINITY);
 				params.setP(0);
 				params.setInitialPopulationSize(0);
-				params.setBlockRarity(false);
 				break;
 			case 13: 
 				params.setLambda(0.9);
@@ -45,7 +44,6 @@ public class Scenario {
 				params.setGama(Double.POSITIVE_INFINITY);
 				params.setP(0);
 				params.setInitialPopulationSize(0);
-				params.setBlockRarity(false);
 				break;
 			case 21:
 				params.setLambda(0.1);
@@ -55,7 +53,6 @@ public class Scenario {
 				params.setGama(0.1);
 				params.setP(0);
 				params.setInitialPopulationSize(0);
-				params.setBlockRarity(false);
 				break;
 			case 22:
 				params.setLambda(0.5);
@@ -65,7 +62,6 @@ public class Scenario {
 				params.setGama(0.1);
 				params.setP(0);
 				params.setInitialPopulationSize(0);
-				params.setBlockRarity(false);
 				break;
 			case 23:
 				params.setLambda(0.9);
@@ -75,7 +71,6 @@ public class Scenario {
 				params.setGama(0.1);
 				params.setP(0);
 				params.setInitialPopulationSize(0);
-				params.setBlockRarity(false);
 				break;
 			case 30:
 				params.setLambda(0.0);
@@ -85,7 +80,6 @@ public class Scenario {
 				params.setGama(Double.POSITIVE_INFINITY);
 				params.setP(1);
 				params.setInitialPopulationSize(1);
-				params.setBlockRarity(false);
 				break;
 			case 40:
 				params.setLambda(0.0);
@@ -95,7 +89,6 @@ public class Scenario {
 				params.setGama(1.0);
 				params.setP(1);
 				params.setInitialPopulationSize(1);
-				params.setBlockRarity(false);
 				break;	
 			case 50:
 				params.setLambda(0.0);
@@ -105,7 +98,6 @@ public class Scenario {
 				params.setGama(Double.POSITIVE_INFINITY);
 				params.setP(1);
 				params.setInitialPopulationSize(1);
-				params.setBlockRarity(false);
 				break;
 			case 60:
 				params.setLambda(0.0);
@@ -115,7 +107,6 @@ public class Scenario {
 				params.setGama(1);
 				params.setP(1);
 				params.setInitialPopulationSize(1);
-				params.setBlockRarity(false);
 				break;
 			default:
 				logger.error("Scenario is not valid.");

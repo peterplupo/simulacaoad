@@ -21,7 +21,7 @@ public class Exponential {
 	
 	/* Gerador de numero aleatorio exponencial. */
 	public double nextRandom() {
-		return -Math.log(1 - random.nextDouble())/rate;
+		return -Math.log(random.nextDouble())/rate;
 	}
 	
 	/* Calcula a esperanca matematica. */
