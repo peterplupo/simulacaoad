@@ -18,7 +18,7 @@ public class PeerUploadEvent extends UploadEvent {
 	void addNextUploadEvent(BatchData newbatchData) {
 		double uploadTime = time + PeerUploadEvent.PEER_UPLOAD_CLOCK.nextRandom();
 		
-		if (!peer.isSeed() || (peer.isSeed() && uploadTime < peer.getExitTime())) {
+		if (!peer.isSeed() || (peer.isSeed() && uploadTime <= peer.getExitTime())) {
 			PeerUploadEvent peerUploadEvent = new PeerUploadEvent(uploadTime, peer, peers, newbatchData, events);
 			events.add(peerUploadEvent);
 			peer.removeUploadEvent(this);

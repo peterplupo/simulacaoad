@@ -24,8 +24,8 @@ public abstract class UploadEvent extends Event {
 		if (destinationPeer != null && destinationPeer.isSeed() && destinationPeer.getExitTime() == 0) {
 			destinationPeer.setExitTime(time + ExitEvent.EXIT_CLOCK.nextRandom());
 			events.add(new ExitEvent(destinationPeer.getExitTime(), destinationPeer, peers, newbatchData, events));
-			batchData.addDownloadTime(time, time - destinationPeer.getArrivalTime());
 			logger.debug(batchData + " " + destinationPeer + " will exit at " + destinationPeer.getExitTime() + ". Download time measure " + (time - destinationPeer.getArrivalTime()) + " registered.");
+			batchData.addDownloadTime(time, time - destinationPeer.getArrivalTime());
 		}
 		addNextUploadEvent(newbatchData);
 	}
