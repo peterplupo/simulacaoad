@@ -57,20 +57,19 @@ public class ReportGenerator {
 //		}
 //		data.addSeries(series4);
 		
-//		XYSeries series5 = new XYSeries("Quantidade acumulada de eventos registrados / 1000");
-//		for (Map.Entry<Double, Integer> eventsSize : Measurement.getEventsPerTime().entrySet()) {
-//			series5.add((Number)eventsSize.getKey(), eventsSize.getValue()/1000);
-//			if (eventsSize.getValue() > 15000) {
-//				break;
-//			}
-//		}
-//
-//		data.addSeries(series5);
+		XYSeries series5 = new XYSeries("Quantidade acumulada de eventos registrados / 1000");
+		for (Map.Entry<Double, Integer> eventsSize : Measurement.getEventsPerTime().entrySet()) {
+			series5.add((Number)eventsSize.getKey(), eventsSize.getValue()/1000);
+			if (eventsSize.getValue() > 15000) {
+				break;
+			}
+		}
+		data.addSeries(series5);
 		
-//		XYSeries series6 = new XYSeries("Fim da fase transiente");
-//		series6.add(687.5774024720748, 0);
-//		series6.add(687.5774024720748, 80);
-//		data.addSeries(series6);
+		XYSeries series6 = new XYSeries("Fim da fase transiente");
+		series6.add(687.5774024720748, 0);
+		series6.add(687.5774024720748, 80);
+		data.addSeries(series6);
 		
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
@@ -99,7 +98,7 @@ public class ReportGenerator {
 		getPopulationPMF(filePrefix, batches, lambda, mi, u, true);
 	}
 	
-	public static void getPopulationPMF(String filePrefix, Collection<BatchData> batches,  double lambda, double mi, double u, boolean mm1) {
+	private static void getPopulationPMF(String filePrefix, Collection<BatchData> batches,  double lambda, double mi, double u, boolean mm1) {
 		
 		XYSeriesCollection data = new XYSeriesCollection();
 
@@ -119,11 +118,35 @@ public class ReportGenerator {
 			}
 			
 		}
-		
+		BufferedWriter out = null;
+		if (mm1) {
+			try {
+				out = new BufferedWriter(new FileWriter(filePrefix + "mm1.txt"));
+				out.write("mm1 data");
+				out.newLine();
+				out.write("Population\tFound\tExpected");
+				out.newLine();
+			} catch (IOException e) {
+			}
+		}
 		for (Map.Entry<Integer, Double> prob : popProbDistRun.entrySet()) {
-			series.add((Number)prob.getKey(), prob.getValue()/batches.size());
-			if (lambda != 0 || mi != 0 || u != 0)
-			series2.add((Number)prob.getKey(), Math.pow(lambda / (mi + u), prob.getKey())*(1 - lambda / (mi + u)));
+			double time = prob.getValue()/batches.size();
+			series.add((Number)prob.getKey(), time);
+			if (mm1) {
+				double mm1time = Math.pow(lambda / (mi + u), prob.getKey())*(1 - lambda / (mi + u));
+				series2.add((Number)prob.getKey(), mm1time);
+				try {
+					out.write(prob.getKey() + "\t" + time + "\t" + mm1time);
+					out.newLine();
+				} catch (IOException e) {
+				}
+			}
+		}
+		if (out != null) {
+			try {
+				out.close();
+			} catch (IOException e) {
+			}
 		}
 		
 		data.addSeries(series);
@@ -141,7 +164,11 @@ public class ReportGenerator {
         );
         
         try {
-			ChartUtilities.saveChartAsPNG(new File(filePrefix + "mediaPopPMF.png"), chart, 600, 400);
+        	if (mm1) {
+        		ChartUtilities.saveChartAsPNG(new File(filePrefix + "mm1MediaPopPMF.png"), chart, 600, 400);
+        	} else {
+        		ChartUtilities.saveChartAsPNG(new File(filePrefix + "mediaPopPMF.png"), chart, 600, 400);
+        	}
 		} catch (IOException e) {
 		}
         
