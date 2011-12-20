@@ -64,7 +64,7 @@ public class Peer {
 	
 	public Peer sendBlock(Collection<Peer> peers) {
 		List<Peer> shuffledPeers = new ArrayList<Peer>(peers);
-		shuffledPeers.remove(this);
+//		shuffledPeers.remove(this);
 //		Collections.shuffle(shuffledPeers, CHOICES.getRandom());
 		
 		Peer chosenPeer = null;

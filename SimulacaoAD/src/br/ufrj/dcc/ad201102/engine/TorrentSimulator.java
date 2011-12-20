@@ -20,7 +20,7 @@ import br.ufrj.dcc.ad201102.report.ReportGenerator;
 public class TorrentSimulator {
 	
 	private static Logger logger = Logger.getLogger(TorrentSimulator.class);
-	private static Integer TYPE_SCENARIO = 11;
+	private static Integer TYPE_SCENARIO = 50;
 	
 	double lambda;
 	int blocksNumber;
@@ -38,46 +38,66 @@ public class TorrentSimulator {
 	public static void main(String[] args) {
 		
 		SimulationParameters params;
-		TorrentSimulator simulator;
 		
-		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
-		
+		TYPE_SCENARIO = 11;
 		params = new Scenario().getScenario(TYPE_SCENARIO);
+		run(params);
+		
+//		System.out.println("40 normal");
+		
+//		TYPE_SCENARIO = 12;
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
+//		run(params);
+		
+//		System.out.println("50 normal");
+//		
+//		TYPE_SCENARIO = 60;
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
+//		run(params);
+//		
+//		System.out.println("60 normal");
+//		
+//		TYPE_SCENARIO = 40;
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
+//		params.setBlocksNumber(10);
+//		run(params);
+//		
+//		System.out.println("40 10 blocos");
+//		
+//		TYPE_SCENARIO = 50;
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
+//		params.setBlocksNumber(10);
+//		run(params);
+//		
+//		System.out.println("50 10 blocos");
+//		
+//		TYPE_SCENARIO = 60;
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
+//		params.setBlocksNumber(10);
+//		run(params);
+//		
+//		System.out.println("60 10 blocos");
+//		
+//		TYPE_SCENARIO = 40;
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
 //		params.setBlockRarity(true);
-		//execucao populacao aberta
-		if (params.isBlockRarity()) {
-			filePrefix = filePrefix + "rarity";
-		}
-		if (params.getInitialPopulationSize() == 0) {
-			if (transientAnalisys) {
-				params.setBlocksNumber(10);
-			}
-			simulator = new TorrentSimulator(params);
-			simulator.simulate();
-			ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
-			ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
-			ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
-			if (transientAnalisys) {
-				ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
-			}
-			if (TYPE_SCENARIO < 13) {
-				ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false), params.getLambda(), params.getMi(), params.getU());
-			}
-		} else {
-			//Execucao populacao fechada
-			for (int i = 1; i <= 50; i++) {
-				logger.info("Run "+ i +" started.");
-				params.setInitialPopulationSize(i);
-				simulator = new TorrentSimulator(params);
-				simulator.simulate();
-				ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
-				Measurement.newRun(i);
-			}
-			ReportGenerator.getOutput(filePrefix, false);
-			if (transientAnalisys) {
-				ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
-			}
-		}
+//		run(params);
+//		
+//		System.out.println("40 raro normal");
+//		
+//		TYPE_SCENARIO = 50;
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
+//		params.setBlockRarity(true);
+//		run(params);
+//		
+//		System.out.println("50 raro normal");
+//		
+//		TYPE_SCENARIO = 60;
+//		params = new Scenario().getScenario(TYPE_SCENARIO);
+//		params.setBlockRarity(true);
+//		run(params);
+//		
+//		System.out.println("60 raro normal");
 		
 //		params.lambda = 1;
 //		params.blocksNumber = 10;
@@ -93,6 +113,46 @@ public class TorrentSimulator {
 //		params.transientSize = 150;
 
 		
+	}
+
+	private static void run(SimulationParameters params) {
+		String filePrefix = "graficos\\cenario" + TYPE_SCENARIO + "\\reports" + TYPE_SCENARIO;
+		//execucao populacao aberta
+		if (params.isBlockRarity()) {
+			filePrefix = filePrefix + "rarity";
+		}
+		if (params.getBlocksNumber() == 10) {
+			filePrefix = filePrefix + "10blocos";
+		}
+		if (params.getInitialPopulationSize() == 0) {
+			if (transientAnalisys) {
+				params.setBlocksNumber(10);
+			}
+			TorrentSimulator simulator = new TorrentSimulator(params);
+			simulator.simulate();
+//			ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false));
+//			ReportGenerator.getDownloadTimeCDF(filePrefix, Measurement.getBatchData(false));
+//			ReportGenerator.getTimes(filePrefix, Measurement.getBatchData(false));
+//			if (transientAnalisys) {
+//				ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
+//			}
+			if (TYPE_SCENARIO < 13) {
+				ReportGenerator.getPopulationPMF(filePrefix, Measurement.getBatchData(false), params.getLambda(), params.getMi(), params.getU());
+			}
+		} else {
+			//Execucao populacao fechada
+			for (int i = 1; i <= 50; i++) {
+				logger.info("Run "+ i +" started.");
+				params.setInitialPopulationSize(i);
+				TorrentSimulator simulator = new TorrentSimulator(params);
+				simulator.simulate();
+				if (transientAnalisys) {
+					ReportGenerator.getTransientAnalisys(filePrefix, Measurement.getBatchData(true));
+				}
+				Measurement.newRun(i);
+			}
+			ReportGenerator.getOutput(filePrefix, false);
+		}
 	}
 	
 	public TorrentSimulator(double lambda, int blocksNumber, double mi,
@@ -179,6 +239,7 @@ public class TorrentSimulator {
 			batchData.setInitialBatchPopulation(peers.size());
 			boolean firstEvent = true;
 			while (batchSize > batchData.getDownloadTimes().length) {
+//			for (int i = 0; i <= batchSize; i++) {
 				Event currentEvent = events.poll();
 				if (firstEvent) {
 					logger.info(batchNumber + " batch started at "+ currentTime +".");

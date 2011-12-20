@@ -31,7 +31,7 @@ public class Measurement {
 	
 	public static void newRun(Integer tag) {
 		multipleSimulations.put(tag, simulationData);
-		reset();
+		simulationData = new TreeMap<Integer, BatchData>();
 	}
 	
 	public static  Map<Integer, Map<Integer, BatchData>> getRuns() {
