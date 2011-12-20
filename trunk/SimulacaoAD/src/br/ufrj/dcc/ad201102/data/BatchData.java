@@ -100,21 +100,26 @@ public class BatchData implements Comparable<BatchData> {
 		double batchTime = endTime - startTime;
 		double lastTime = getStartTime();
 		int lastPop = getInitialBatchPopulation();
-		Map<Integer, Double> popProbDist = new TreeMap<Integer, Double>();
+		Map<Integer, Double> popProbDistTemp = new TreeMap<Integer, Double>();
 		
 		if (getPopulationSize().size() == 0) {
-			popProbDist.put(getInitialBatchPopulation(), getEndTime() - getStartTime());
+			popProbDistTemp.put(getInitialBatchPopulation(), getEndTime() - getStartTime());
 		} else {
 			for (Map.Entry<Double, Integer> size : getPopulationSize().entrySet()) {
-				if (popProbDist.get(lastPop) == null) {
-					popProbDist.put(lastPop,(size.getKey()-lastTime)/batchTime);
+				if (popProbDistTemp.get(lastPop) == null) {
+					popProbDistTemp.put(lastPop,(size.getKey()-lastTime));
 				} else {
-					popProbDist.put(lastPop,popProbDist.get(lastPop) + (size.getKey()-lastTime)/batchTime);
+					popProbDistTemp.put(lastPop,popProbDistTemp.get(lastPop) + (size.getKey()-lastTime));
 				}
 				lastPop = size.getValue();
 				lastTime = size.getKey();
 			}
 		}
+		Map<Integer, Double> popProbDist = new TreeMap<Integer, Double>();
+		for (Map.Entry<Integer, Double> fraction : popProbDistTemp.entrySet()) {
+			popProbDist.put(fraction.getKey(), fraction.getValue()/batchTime);
+		}
+		
 		return popProbDist;
 	}
 	

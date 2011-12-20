@@ -68,7 +68,7 @@ public class ReportGenerator {
 		
 		XYSeries series6 = new XYSeries("Fim da fase transiente");
 		series6.add(687.5774024720748, 0);
-		series6.add(687.5774024720748, 80);
+		series6.add(687.5774024720748, 125);
 		data.addSeries(series6);
 		
 		
@@ -105,43 +105,60 @@ public class ReportGenerator {
 		XYSeries series = new XYSeries("Media da população");
 		XYSeries series2 = new XYSeries("MM1");
 		
-		Map<Integer, Double> popProbDistRun = new TreeMap<Integer, Double>();
+		Map<Integer, Double> popProbDistRunTemp = new TreeMap<Integer, Double>();
+		
 		for (BatchData batch : batches) {
 //			series.add(batch.getBatchNumber(), batch.getMeanPopulation());
 			Map<Integer, Double> popProbDistBatch = batch.getPopulationProbabilityDistribution();
 			for (Map.Entry<Integer, Double> prob : popProbDistBatch.entrySet()) {
-				if (popProbDistRun.get(prob.getKey()) == null) {
-					popProbDistRun.put(prob.getKey(), prob.getValue());
+//				double fraction = prob.getValue()/batches.size();
+				if (popProbDistRunTemp.get(prob.getKey()) == null) {
+					popProbDistRunTemp.put(prob.getKey(), prob.getValue());
+
 				} else {
-					popProbDistRun.put(prob.getKey(), popProbDistRun.get(prob.getKey()) + prob.getValue());
+					popProbDistRunTemp.put(prob.getKey(), popProbDistRunTemp.get(prob.getKey()) + prob.getValue());
 				}
 			}
 			
 		}
+		
+		Map<Integer, Double> popProbDistRun = new TreeMap<Integer, Double>();
+		Map<Integer, DescriptiveStatistics> popStats = new TreeMap<Integer, DescriptiveStatistics>();
+		for (Map.Entry<Integer, Double> prob : popProbDistRunTemp.entrySet()) {
+			double fraction = prob.getValue()/batches.size();
+			popProbDistRun.put(prob.getKey(), fraction);
+			DescriptiveStatistics stats = new DescriptiveStatistics();
+			stats.addValue(fraction);
+			popStats.put(prob.getKey(), stats);
+		}
+		
+		
 		BufferedWriter out = null;
 		if (mm1) {
 			try {
 				out = new BufferedWriter(new FileWriter(filePrefix + "mm1.txt"));
 				out.write("mm1 data");
 				out.newLine();
-				out.write("Population\tFound\tExpected");
+				out.write("Population\tExpected\tFound\tLow CI\tHigh CI");
 				out.newLine();
 			} catch (IOException e) {
 			}
 		}
 		for (Map.Entry<Integer, Double> prob : popProbDistRun.entrySet()) {
-			double time = prob.getValue()/batches.size();
-			series.add((Number)prob.getKey(), time);
+			series.add((Number)prob.getKey(), prob.getValue());
 			if (mm1) {
-				double mm1time = Math.pow(lambda / (mi + u), prob.getKey())*(1 - lambda / (mi + u));
+				double mm1time = Math.pow(lambda / u, prob.getKey())*(1 - lambda / u);
+				DescriptiveStatistics stats = popStats.get(prob.getKey());
+				double ci = Measurement.getConfidenceInterval95(stats.getVariance(), stats.getN());
 				series2.add((Number)prob.getKey(), mm1time);
 				try {
-					out.write(prob.getKey() + "\t" + time + "\t" + mm1time);
+					out.write(prob.getKey() + "\t" + mm1time + "\t" + prob.getValue() + "\t" + (prob.getValue() - ci) + "\t" + (prob.getValue() + ci));
 					out.newLine();
 				} catch (IOException e) {
 				}
 			}
 		}
+		
 		if (out != null) {
 			try {
 				out.close();
@@ -149,8 +166,10 @@ public class ReportGenerator {
 			}
 		}
 		
+		if (mm1) {
+			data.addSeries(series2);
+		}
 		data.addSeries(series);
-		data.addSeries(series2);
 		
         JFreeChart chart = ChartFactory.createXYLineChart(
             "PMF população",
